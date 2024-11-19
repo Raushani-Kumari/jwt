@@ -8,6 +8,8 @@ const Home = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log("Home use Effect");
+    
     const fetchData = async () => {
       try {
         const response = await apiRequest('/home', 'GET');

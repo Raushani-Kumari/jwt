@@ -30,7 +30,8 @@ const authorizedRoles = (...allowedRoles) => {
       console.log("checking role : ", user.role)
 
       // Check if the user's role is one of the allowed roles
-      if (!allowedRoles.includes(user.role)) {
+      const hasAccessRole = user.role.some(r => allowedRoles.includes(r));
+      if (!hasAccessRole) {
         return res.status(403).json({ message: 'Access Denied' });
       }
 

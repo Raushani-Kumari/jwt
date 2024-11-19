@@ -1,13 +1,49 @@
-import './App.css';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import LogIn from './components/jwt-ui/LogIn';
-import Signup from './components/jwt-ui/Signup';
-import Home from './components/jwt-ui/Home';
-import ProtectedRoute from './routes/ProtectedRoute';
-import { UserProvider } from './context/UserContext';
-import Admin from './components/jwt-ui/Admin';
+import "./App.css";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useNavigate,
+} from "react-router-dom";
+import LogIn from "./components/jwt-ui/LogIn";
+import Signup from "./components/jwt-ui/Signup";
+import Home from "./components/jwt-ui/Home";
+import ProtectedRoute from "./routes/ProtectedRoute";
+import { UserContext, UserProvider } from "./context/UserContext";
+import Admin from "./components/jwt-ui/Admin";
+import { fetchToken, getToken } from "./services/authService";
+import { useContext, useEffect } from "react";
+import Error from "./components/jwt-ui/Error";
 
 function App() {
+  const navigate = useNavigate();
+  const { setUser } = useContext(UserContext); // Access user from context
+
+  useEffect(() => {
+    console.log("Checking existing session...");
+    const existingSessionToken = getToken();
+    if (!existingSessionToken) {
+      console.log("NO existing session, redirecting to login...");
+      // to login
+      navigate("/login");
+      return;
+    }
+    console.log("Found existing session, restoring session...");
+    fetchToken()
+      .then((res) => {
+        // setloading(false);
+        console.log("Authenticated...", res);
+        setUser({ ...res?.user, isAuthenticated: true });
+        // dispatch(
+        //   setCredentials(Object.assign(res, { cToken: existingSessionToken }))
+        // );
+      })
+      .catch((error) => {
+        console.log("UnAuthenticated...--->>>....Logging out...");
+        navigate("/login");
+      });
+    // setloading(false);
+  }, []);
   return (
     // <Router>
     //   <div className="app">
@@ -19,10 +55,8 @@ function App() {
     //     </Routes>
     //   </div>
     // </Router>
-<UserProvider>
-    <Router>
-      <div className='app'>
 
+    <div className="app">
       {/* <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/" element={<ProtectedRoute roles={['USER', 'ADMIN']} />}>
@@ -33,21 +67,38 @@ function App() {
           </Route>
         </Routes> */}
 
-        <Routes>
-          <Route element={<ProtectedRoute roles={['user', 'admin', 'seller']} />}>
-            <Route path='/home' element={<Home />} />
-          </Route>
-          <Route path='/admin' element={<ProtectedRoute roles={['admin']}/>}>
-          <Route path='/admin' element={<Admin />} />
-          </Route>
-          <Route exact path='/' element={<LogIn />} />
-          <Route exact path='/login' element={<LogIn/>} />
-          <Route exact path='/Signup' element={<Signup/>} />
+      <Routes>
+        <Route
+          path="/home"
+          element={
+            <ProtectedRoute roles={["user", "admin", "seller"]}>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute roles={["admin"]}>
+              <Admin />
+            </ProtectedRoute>
+          }
+        />
+         <Route
+          path="/user"
+          element={
+            <ProtectedRoute roles={["user"]}>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
 
-        </Routes>
-      </div>
-    </Router>
-    </UserProvider>
+        <Route exact path="/" element={<LogIn />} />
+        <Route exact path="/login" element={<LogIn />} />
+        <Route exact path="/Signup" element={<Signup />} />
+        <Route exact path="/error" element={<Error />} />
+      </Routes>
+    </div>
   );
 }
 
