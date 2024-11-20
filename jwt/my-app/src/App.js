@@ -4,6 +4,7 @@ import {
   Route,
   Routes,
   useNavigate,
+  useLocation,
 } from "react-router-dom";
 import LogIn from "./components/jwt-ui/LogIn";
 import Signup from "./components/jwt-ui/Signup";
@@ -11,33 +12,41 @@ import Home from "./components/jwt-ui/Home";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import { UserContext } from "./context/UserContext";
 import Admin from "./components/jwt-ui/Admin";
-import { fetchToken, getToken } from "./services/authService";
-import { useContext, useEffect } from "react";
+import { fetchCurrentUser, fetchToken, getToken } from "./services/authService";
+import { useContext, useEffect, useState } from "react";
 import Error from "./components/jwt-ui/Error";
 import Seller from "./components/jwt-ui/Seller";
+import { Flex, Layout, Progress, Spin } from "antd";
 
 function App() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const { pathname } = useLocation();
   const { setUser } = useContext(UserContext);
 
   useEffect(() => {
+    setLoading(true);
     console.log("Checking existing session...");
     const existingSessionToken = getToken();
     if (!existingSessionToken) {
       console.log("NO existing session, redirecting to login...");
       // to login
+      setLoading(false);
       navigate("/login");
       return;
     }
-    console.log("Found existing session, restoring session...");
-    fetchToken()
+    console.log("Found existing session, restoring session...", pathname);
+    fetchCurrentUser()
       .then((res) => {
-        console.log("Authenticated...", res);
         setUser({ ...res?.user, isAuthenticated: true });
+        navigate(pathname);
       })
       .catch((error) => {
         console.log("UnAuthenticated...--->>>....Logging out...", error);
         navigate("/login");
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
   return (
@@ -51,45 +60,54 @@ function App() {
     //     </Routes>
     //   </div>
     // </Router>
-
-    <div className="app">
-      <Routes>
-        <Route
-          path="/home"
-          element={
-            <ProtectedRoute roles={["user", "admin", "seller"]}>
-              <Home />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin"
-          element={
-            <ProtectedRoute roles={["admin"]}>
-              <Admin />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/user"
-          element={
-            <ProtectedRoute roles={["user"]}>
-              <Home />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/seller" element={
-          <ProtectedRoute roles={["seller"]}>
-            <Seller />
-          </ProtectedRoute>
-        }
-        />
-        <Route exact path="/" element={<LogIn />} />
-        <Route exact path="/login" element={<LogIn />} />
-        <Route exact path="/signup" element={<Signup />} />
-        <Route exact path="/error" element={<Error />} />
-      </Routes>
-    </div>
+    <>
+      {loading ? (
+        <Flex style={{ height: "inherit" }} align="center" justify="center">
+          <Spin size="large" />
+        </Flex>
+      ) : (
+        <div className="app">
+          <Routes>
+            <Route
+              path="/home"
+              element={
+                <ProtectedRoute roles={["user", "admin", "seller"]}>
+                  <Home />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute roles={["admin"]}>
+                  <Admin />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/user"
+              element={
+                <ProtectedRoute roles={["user"]}>
+                  <Home />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/seller"
+              element={
+                <ProtectedRoute roles={["seller"]}>
+                  <Seller />
+                </ProtectedRoute>
+              }
+            />
+            <Route exact path="/" element={<LogIn />} />
+            <Route exact path="/login" element={<LogIn />} />
+            <Route exact path="/signup" element={<Signup />} />
+            <Route exact path="/error" element={<Error />} />
+          </Routes>
+        </div>
+      )}
+    </>
   );
 }
 

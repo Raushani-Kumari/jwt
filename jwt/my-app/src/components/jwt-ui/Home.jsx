@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { apiRequest, fetchUserData } from '../../services/authService';
+import { apiRequest, fetchCurrentUser } from '../../services/authService';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../jwt-ui/Navbar'
 import { UserContext } from '../../context/UserContext';
@@ -24,15 +24,15 @@ const Home = () => {
         // get user data as response from that api call
         // setuser using useContext
         try {
-          const fetchuserdata = await fetchUserData(token);
-          if (!fetchuserdata) {
+          const fetchCurrentUser = await fetchCurrentUser(token);
+          if (!fetchCurrentUser) {
             console.error("No user found....need to logout")
             navigate('/login');
           }
 
-          // if (fetchuserdata) {
-            console.log("fetched data in home component : ", fetchuserdata);
-            const fetchedUserfromDb = JSON.parse(fetchUserData.userFound);
+          // if (fetchCurrentUser) {
+            console.log("fetched data in home component : ", fetchCurrentUser);
+            const fetchedUserfromDb = JSON.parse(fetchCurrentUser.userFound);
             console.log("json parsed data" ,fetchedUserfromDb)
             setUser(fetchedUserfromDb);
             console.log("user set...")

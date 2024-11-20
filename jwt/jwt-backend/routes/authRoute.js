@@ -20,32 +20,27 @@ router.get("/home", authMiddleware, (req, res) => {
       "You have an access to protected Route. Thank you for logging in...",
   });
 });
-router.get('/fetch-data', authMiddleware, async (req, res) => {
-    const { user } = req;
-    console.log("user to find...", user.userId)
-    try {
-        const userDatafromdb = await User.findById(user.userId);
+router.get("/me", authMiddleware, async (req, res) => {
+  const { user } = req;
+  console.log("user to find...", user.userId);
+  try {
+    const foundUser = await User.findById(user.userId);
 
-        if (!userDatafromdb) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-        console.log("User data from database: ", userDatafromdb);
-        const userFound = {
-          email: userDatafromdb.email,
-          username: userDatafromdb.username
-        }
-        return res.json({message: "user found" ,userFound});
-
-    } catch (error) {
-        console.log("error in fetching user data from db", error);
+    if (!foundUser) {
+      return res.status(404).json({ message: "User not found" });
     }
-    // console.log("fetched user and returned it")
-})
+    console.log("User data from database: ", foundUser);
+    const { email, _id: userId,  username, role } = foundUser;
+    return res.json({ user: { email, username, role, userId } });
+  } catch (error) {
+    console.log("error in fetching user data from db", error);
+  }
+  // console.log("fetched user and returned it")
+});
 router.get("/validate-token", authMiddleware, (req, res) => {
   const { userId, role } = req.user;
-  console.log("req.user from uservalidate", req.user)
+  console.log("req.user from uservalidate", req.user);
   return res.json({ message: "token validateddd", user: { userId, role } });
 });
-
 
 export default router;

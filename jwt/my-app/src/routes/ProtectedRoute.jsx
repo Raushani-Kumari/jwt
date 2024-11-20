@@ -22,7 +22,7 @@ const ProtectedRoute = ({ roles, children }) => {
 
     const hasRequiredRole = userRoles?.some((role) => roles.includes(role));
     if (!hasRequiredRole) {
-      navigate("/error", { state: { message: "unauthorized" } });
+      navigate("/error", { state: { message: "You are not authorized to access this resource." } });
     }
   }, [navigate]);
 

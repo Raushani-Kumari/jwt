@@ -50,7 +50,7 @@ const Navbar = () => {
           ECOMMERCE
         </div>
 
-        <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
+        <div style={{ flex: 1, display: 'flex', justifyContent: 'start' }}>
           <Menu
             theme="dark" 
             mode="horizontal"
