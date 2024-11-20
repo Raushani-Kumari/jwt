@@ -1,8 +1,15 @@
 import React from 'react'
+import Navbar from './Navbar'
 
 const Admin = () => {
   return (
-    <div>Admin Component</div>
+    <>
+    <Navbar />
+    <div style={{
+      textAlign: "center", margin: "20px", padding: "20px", fontSize: "40px"
+  }}>Admin Component</div>
+    
+    </>
   )
 }
 

@@ -1,9 +1,9 @@
 import express from 'express';
-import { user } from '../controllers/authController.js';
+import { admin } from '../controllers/authController.js';
 import authMiddleware from '../middleware/authMiddleware.js'
 import authorizedRoles from '../middleware/roleMiddleware.js';
 const router = express.Router();
 
-router.get('/', authMiddleware ,authorizedRoles("user"), user);
+router.get('/', authMiddleware ,authorizedRoles("admin"), admin);
 
 export default router;

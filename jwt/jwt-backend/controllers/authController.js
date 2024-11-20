@@ -95,6 +95,10 @@ const fetchRefreshToken = async (req, res) => {
       expiresIn: "7d",
     });
     console.log("newrefreshtoken generated");
+    const userData = await User.findById(payload.userId);
+    console.log("userdata on refresh : ", userData);
+
+
 
     // Send the new tokens back in the response
     return res.status(200).json({
@@ -102,11 +106,14 @@ const fetchRefreshToken = async (req, res) => {
       refreshToken: newRefreshToken,
       tokenExpiry: Date.now() + 2 * 60 * 1000,
       refreshTokenExpiry: Date.now() + 86400 * 1000,
+      userData
     });
   } catch (error) {
     return res.status(403).json({ error: "Invalid refresh token" });
   }
 };
+
+
 
 const user = (req, res) => {
   res.send("hello user !!");

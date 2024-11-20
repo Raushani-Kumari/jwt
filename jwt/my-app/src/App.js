@@ -9,15 +9,16 @@ import LogIn from "./components/jwt-ui/LogIn";
 import Signup from "./components/jwt-ui/Signup";
 import Home from "./components/jwt-ui/Home";
 import ProtectedRoute from "./routes/ProtectedRoute";
-import { UserContext, UserProvider } from "./context/UserContext";
+import { UserContext } from "./context/UserContext";
 import Admin from "./components/jwt-ui/Admin";
 import { fetchToken, getToken } from "./services/authService";
 import { useContext, useEffect } from "react";
 import Error from "./components/jwt-ui/Error";
+import Seller from "./components/jwt-ui/Seller";
 
 function App() {
   const navigate = useNavigate();
-  const { setUser } = useContext(UserContext); // Access user from context
+  const { setUser } = useContext(UserContext);
 
   useEffect(() => {
     console.log("Checking existing session...");
@@ -31,18 +32,13 @@ function App() {
     console.log("Found existing session, restoring session...");
     fetchToken()
       .then((res) => {
-        // setloading(false);
         console.log("Authenticated...", res);
         setUser({ ...res?.user, isAuthenticated: true });
-        // dispatch(
-        //   setCredentials(Object.assign(res, { cToken: existingSessionToken }))
-        // );
       })
       .catch((error) => {
-        console.log("UnAuthenticated...--->>>....Logging out...");
+        console.log("UnAuthenticated...--->>>....Logging out...", error);
         navigate("/login");
       });
-    // setloading(false);
   }, []);
   return (
     // <Router>
@@ -57,16 +53,6 @@ function App() {
     // </Router>
 
     <div className="app">
-      {/* <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/" element={<ProtectedRoute roles={['USER', 'ADMIN']} />}>
-            <Route path="" element={<HomePage />} />
-          </Route>
-          <Route path="/admin" element={<ProtectedRoute roles={['ADMIN']} />}>
-            <Route path="" element={<AdminPage />} />
-          </Route>
-        </Routes> */}
-
       <Routes>
         <Route
           path="/home"
@@ -84,7 +70,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-         <Route
+        <Route
           path="/user"
           element={
             <ProtectedRoute roles={["user"]}>
@@ -92,10 +78,15 @@ function App() {
             </ProtectedRoute>
           }
         />
-
+        <Route path="/seller" element={
+          <ProtectedRoute roles={["seller"]}>
+            <Seller />
+          </ProtectedRoute>
+        }
+        />
         <Route exact path="/" element={<LogIn />} />
         <Route exact path="/login" element={<LogIn />} />
-        <Route exact path="/Signup" element={<Signup />} />
+        <Route exact path="/signup" element={<Signup />} />
         <Route exact path="/error" element={<Error />} />
       </Routes>
     </div>

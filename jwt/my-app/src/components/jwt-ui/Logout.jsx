@@ -18,9 +18,9 @@ const Logout = () => {
     }
     return (
         <>
-            <Button onClick={handleLogout} sx={{ color: "navy" }}>Logout</Button>
+            <Button onClick={handleLogout} sx={{ color: "white"}}>Logout</Button>
         </>
     )
 }
 
-export default Logout
+export default Logout;

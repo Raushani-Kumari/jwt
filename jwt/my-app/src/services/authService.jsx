@@ -124,4 +124,20 @@ export const fetchToken = async () => {
     console.log("user data after validating it from backnd api", data);
     return data;
   };
+
+
+  export const fetchUserData = async (token) => {
+    const response = await fetch(`${api_path}/fetch-data`,{
+        method: 'GET',
+        headers : {
+            Authorization : `bearer ${token}`,
+        },
+    });
+    if(!response.ok){
+        throw new Error('User not found');
+    }
+    const fetchedUser = await response.json();
+    console.log("user data fetched ", fetchedUser);
+    return fetchedUser;
+  }
   

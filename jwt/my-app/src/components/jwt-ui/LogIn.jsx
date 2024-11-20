@@ -1,18 +1,16 @@
 import React, { useContext, useState } from "react";
-import { Button, Checkbox, Form } from "semantic-ui-react";
 import { Link, useNavigate } from "react-router-dom";
 import { login, saveToken } from "../../services/authService";
 import { saveTokenWithExpiry } from "../../utils/tokenUtil";
 import { UserContext } from "../../context/UserContext";
+import { Button, Checkbox, Form, Input, message, Row, Col } from "antd";
 
 export default function LogIn() {
-  const { setUser } = useContext(UserContext); // Access user from context
+  const { setUser } = useContext(UserContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [checkbox, setCheckbox] = useState(false);
   const navigate = useNavigate();
 
@@ -42,17 +40,6 @@ export default function LogIn() {
     }
   };
 
-  const handleConfirmPassword = (e) => {
-    const confirmPasswordValue = e.target.value;
-    setConfirmPassword(confirmPasswordValue);
-
-    if (password !== confirmPasswordValue) {
-      setConfirmPasswordError("Password and Confirm Password don't match");
-    } else {
-      setConfirmPasswordError("");
-    }
-  };
-
   const handleFormData = async (e) => {
     e.preventDefault();
     console.log(email, password);
@@ -69,7 +56,6 @@ export default function LogIn() {
       if (token && refreshToken) {
         // save the token with the expiry time
         saveTokenWithExpiry(token, refreshToken);
-        // saveToken(response.token);
         console.log("token", token);
         console.log("refreshToken", refreshToken);
         console.log("Login successful.");
@@ -84,62 +70,73 @@ export default function LogIn() {
   };
 
   return (
-    <div className="container">
-      <div className="form">
-        <Form className="create-form">
-          <h1 className="form-heading">Log In</h1>
-          <Form.Field className="margin-top">
-            <label>Email </label>
-            <input
-              placeholder="Email"
-              type="email"
-              value={email}
-              onChange={handleEmail}
-            />
-          </Form.Field>
-          <span style={{ color: "red" }}>{emailError}</span>
-          <Form.Field className="margin-top">
-            <label>Password</label>
-            <input
-              placeholder="Password"
-              type="password"
-              value={password}
-              onChange={handlePassword}
-            />
-          </Form.Field>
-          <span style={{ color: "red" }}>{passwordError}</span>
-          {/* <Form.Field className="margin-top">
-            <label>Confirm Password</label>
-            <input
-              placeholder="Confirm Password"
-              type="password"
-              value={confirmPassword}
-              onChange={handleConfirmPassword}
-            />
-          </Form.Field> */}
-          <span style={{ color: "red" }}>{confirmPasswordError}</span>
-          <Form.Field className="margin-top">
-            <Checkbox
-              label="I agree to the Terms and Conditions"
-              onChange={(e) => setCheckbox(true)}
-            />
-          </Form.Field>
-          <div className="btn-position">
-            <Button
-              className="form-button"
-              type="submit"
-              onClick={handleFormData}
+    <Row justify="center" align="middle" style={{ minHeight: "100vh" }}>
+      <Col xs={24} sm={16} md={12} lg={8}>
+        <div className="form" style={{ border: "1px solid rgb(40, 60, 92)", padding: "20px", borderRadius: "5px" }}>
+          <Form className="create-form" onSubmitCapture={handleFormData}>
+            <h1 className="form-heading">Log In</h1>
+
+            <Form.Item
+              style={{ width: "100%" }}
+              label="Email"
+              validateStatus={emailError ? "error" : ""}
+              help={emailError || ""}
+              labelCol={{ span: 24 }}
+              wrapperCol={{ span: 24 }}
             >
-              Login
-            </Button>
-          </div>
-          <div style={{ textAlign: "center", margin: "4px" }}>
-            <span>
-              New User ? <Link to="/signup">Signup</Link>
-            </span>
-          </div>
-        </Form>
-      </div>
-    </div>
+              <Input
+                placeholder="Email"
+                type="email"
+                value={email}
+                onChange={handleEmail}
+              />
+            </Form.Item>
+
+            <Form.Item
+              style={{ width: "100%" }}
+              label="Password"
+              validateStatus={passwordError ? "error" : ""}
+              help={passwordError || ""}
+              labelCol={{ span: 24 }}
+              wrapperCol={{ span: 24 }}
+            >
+              <Input.Password
+                placeholder="Password"
+                value={password}
+                onChange={handlePassword}
+              />
+            </Form.Item>
+
+            <Form.Item>
+              <Checkbox
+                wrapperCol={{ span: 24 }}
+                onChange={(e) => setCheckbox(e.target.checked)}
+              >
+                I agree to the Terms and Conditions
+              </Checkbox>
+            </Form.Item>
+
+            <Form.Item>
+              <Button
+                style={{ backgroundColor: "navy", color: "white" }}
+                className="custom-button"
+                type="primary"
+                htmlType="submit"
+                block
+                disabled={emailError || passwordError || !checkbox}
+              >
+                Log In
+              </Button>
+            </Form.Item>
+
+            <div style={{ textAlign: "center", marginTop: "16px" }}>
+              <span>
+                New User? <Link to="/signup">Sign Up</Link>
+              </span>
+            </div>
+          </Form>
+        </div>
+      </Col>
+    </Row>
   );
 }

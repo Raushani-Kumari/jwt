@@ -3,6 +3,8 @@ import mongoose from 'mongoose';
 import 'dotenv/config';
 import authRoute from './routes/authRoute.js';
 import userRoute from './routes/userRoute.js';
+import adminRoute from './routes/adminRoute.js';
+import sellerRoute from './routes/sellerRoute.js';
 import cors from 'cors';
 
 
@@ -31,6 +33,9 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 app.use('/api', authRoute);
 app.use('/api/user', userRoute);
+app.use('/api/admin', adminRoute);
+app.use('/api/seller', sellerRoute)
+
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
     console.log(`server is running at ${PORT}`)
