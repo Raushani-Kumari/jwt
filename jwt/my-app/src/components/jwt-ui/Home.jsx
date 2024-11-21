@@ -21,22 +21,22 @@ const Home = () => {
         // post the token to backend
         // get user data as response from that api call
         // setuser using useContext
-        try {
-          const fetchCurrentUser = await fetchCurrentUser(token);
-          if (!fetchCurrentUser) {
-            console.error("No user found....need to logout")
-            navigate('/login');
-          }
+        // try {
+        //   const fetchCurrentUser = await fetchCurrentUser(token);
+        //   if (!fetchCurrentUser) {
+        //     console.error("No user found....need to logout")
+        //     navigate('/login');
+        //   }
 
-          // if (fetchCurrentUser) {
-            console.log("fetched data in home component : ", fetchCurrentUser);
-            const fetchedUserfromDb = JSON.parse(fetchCurrentUser.userFound);
-            setUser(fetchedUserfromDb);
-            console.log("user set...")
-          // }
-        } catch (error) {
-          console.error("error in fetching user data from db")
-        }
+        //   // if (fetchCurrentUser) {
+        //     console.log("fetched data in home component : ", fetchCurrentUser);
+        //     const fetchedUserfromDb = JSON.parse(fetchCurrentUser.userFound);
+        //     setUser(fetchedUserfromDb);
+        //     console.log("user set...")
+        //   // }
+        // } catch (error) {
+        //   console.error("error in fetching user data from db")
+        // }
        
       } catch (error) {
         console.log('Error fetching data:', error);
