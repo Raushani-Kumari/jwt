@@ -165,3 +165,15 @@ export const fetchCurrentUser = async (token) => {
   console.log("user data fetched ", fetchedUser);
   return fetchedUser;
 };
+
+export const updateUser = async (id, username, password) => {
+  try{
+    const response = await axios.post(`${api_path}/update-user`, {
+      id, username, password
+    });
+    console.log("response after calling update user from frontend to backend", response.data);
+    return response.data;
+  } catch(error) {
+    console.error("could not update the response");
+  }
+}

@@ -56,8 +56,6 @@ export default function LogIn() {
       if (token && refreshToken) {
         // save the token with the expiry time
         saveTokenWithExpiry(token, refreshToken);
-        console.log("token", token);
-        console.log("refreshToken", refreshToken);
         console.log("Login successful.");
         navigate("/home");
       } else {

@@ -87,18 +87,16 @@ const fetchRefreshToken = async (req, res) => {
       userId: user.userId,
       role: user.role,
     };
-    // Create new access and refresh tokens
+
     const newToken = jwt.sign(payload, process.env.JWT_SECRET_KEY, {
-      expiresIn: "1h",
+      expiresIn: "2m",
     });
     const newRefreshToken = jwt.sign(payload, process.env.JWT_SECRET_KEY, {
       expiresIn: "7d",
     });
-    console.log("newrefreshtoken generated");
+    console.log("new access token and refresh token generated");
     const userData = await User.findById(payload.userId);
     console.log("userdata on refresh : ", userData);
-
-
 
     // Send the new tokens back in the response
     return res.status(200).json({
@@ -112,8 +110,6 @@ const fetchRefreshToken = async (req, res) => {
     return res.status(403).json({ error: "Invalid refresh token" });
   }
 };
-
-
 
 const user = (req, res) => {
   res.send("hello user !!");

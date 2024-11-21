@@ -10,8 +10,6 @@ const Home = () => {
   const { setUser } = useContext(UserContext);
 
   useEffect(() => {
-    console.log("Home use Effect");
-
     const fetchData = async () => {
       try {
         const response = await apiRequest('/home', 'GET');
@@ -33,7 +31,6 @@ const Home = () => {
           // if (fetchCurrentUser) {
             console.log("fetched data in home component : ", fetchCurrentUser);
             const fetchedUserfromDb = JSON.parse(fetchCurrentUser.userFound);
-            console.log("json parsed data" ,fetchedUserfromDb)
             setUser(fetchedUserfromDb);
             console.log("user set...")
           // }

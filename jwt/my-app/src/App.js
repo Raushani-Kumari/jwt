@@ -17,6 +17,7 @@ import { useContext, useEffect, useState } from "react";
 import Error from "./components/jwt-ui/Error";
 import Seller from "./components/jwt-ui/Seller";
 import { Flex, Layout, Progress, Spin } from "antd";
+import Profile from "./components/jwt-ui/Profile";
 
 function App() {
   const navigate = useNavigate();
@@ -30,7 +31,6 @@ function App() {
     const existingSessionToken = getToken();
     if (!existingSessionToken) {
       console.log("NO existing session, redirecting to login...");
-      // to login
       setLoading(false);
       navigate("/login");
       return;
@@ -104,6 +104,7 @@ function App() {
             <Route exact path="/login" element={<LogIn />} />
             <Route exact path="/signup" element={<Signup />} />
             <Route exact path="/error" element={<Error />} />
+            <Route exact path="/profile" element={<Profile />} />
           </Routes>
         </div>
       )}
