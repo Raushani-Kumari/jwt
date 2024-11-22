@@ -18,6 +18,9 @@ import Error from "./components/jwt-ui/Error";
 import Seller from "./components/jwt-ui/Seller";
 import { Flex, Layout, Progress, Spin } from "antd";
 import Profile from "./components/jwt-ui/Profile";
+import Read from './components/read';
+import Create from './components/create';
+import AddProduct from "./components/jwt-ui/seller/AddProduct";
 
 function App() {
   const navigate = useNavigate();
@@ -100,11 +103,22 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route 
+            path="/seller/addproduct"
+            element= {
+              <ProtectedRoute roles={["seller"]}>
+                <AddProduct/>
+              </ProtectedRoute>
+            }
+            />
             <Route exact path="/" element={<LogIn />} />
             <Route exact path="/login" element={<LogIn />} />
             <Route exact path="/signup" element={<Signup />} />
             <Route exact path="/error" element={<Error />} />
             <Route exact path="/profile" element={<Profile />} />
+            {/* <Route exact path='/addproduct' element={<AddProduct/>} /> */}
+            <Route exact path='/create' Component={Create} />
+    //       <Route exact path='/read' Component={Read} />
           </Routes>
         </div>
       )}

@@ -5,6 +5,7 @@ import authRoute from './routes/authRoute.js';
 import userRoute from './routes/userRoute.js';
 import adminRoute from './routes/adminRoute.js';
 import sellerRoute from './routes/sellerRoute.js';
+import productRoute from './routes/productRoute.js';
 import cors from 'cors';
 
 
@@ -30,6 +31,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 
 app.use('/api', authRoute);
+app.use('/api/product', productRoute);
 app.use('/api/user', userRoute);
 app.use('/api/admin', adminRoute);
 app.use('/api/seller', sellerRoute)

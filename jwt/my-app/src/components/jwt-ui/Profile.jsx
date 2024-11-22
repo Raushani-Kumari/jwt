@@ -10,7 +10,6 @@ const Profile = () => {
     console.log("user from profile", user)
     const navigate = useNavigate();
     // console.log("userid from profile :", user._id)
- 
     
     const [email, setEmail] = useState('');
     const [username, setUserName] = useState('');

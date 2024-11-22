@@ -1,14 +1,14 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Layout, Menu, Dropdown, Avatar, Button, Drawer } from "antd";
 import { UserOutlined, MenuOutlined } from "@ant-design/icons";
-import { Link, useLocation } from "react-router-dom";
-import { UserContext } from "../../context/UserContext";
-import Logout from "./Logout";
-import { navConfig } from "../../config/navConfig";
+import { Link } from "react-router-dom";
+import { UserContext } from "../../../context/UserContext";
+import Logout from "../Logout";
+import { sellerConfig } from "../../../config/sellerConfig";
 
 const { Header } = Layout;
 
-const Navbar = () => {
+const SellerNav = () => {
   const [visibleDrawer, setVisibleDrawer] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const { user } = useContext(UserContext);
@@ -72,7 +72,7 @@ const Navbar = () => {
   );
 
   const NavMenu = () => {
-    const items1 = navConfig.map(({ key, label, link }) => ({
+    const items1 = sellerConfig.map(({ key, label, link }) => ({
       key,
       // extra: <UserOutlined />,
       label: <Link to={link}>{label}</Link>,
@@ -174,10 +174,13 @@ const Navbar = () => {
           <Menu.Item key="3">
             <Link to="/contact">Contact Us</Link>
           </Menu.Item>
+          <Menu.Item key="4">
+            <Link to="/seller/addproduct">Add Product</Link>
+          </Menu.Item>
         </Menu>
       </Drawer>
     </Layout>
   );
 };
 
-export default Navbar;
+export default SellerNav;

@@ -61,7 +61,12 @@ router.post("/update-user", async (req, res) => {
     return res.json({ data: "error in updating in db" })
   }
 })
+// router.post('/add-product', addProduct ,async (req,res) => {
+//   const {productData} = req.body;
+//   console.log("product added....", productData);
+//   return res.status(200).json({message: "Addeddddddd"})
 
+// })
 
 
 export default router;
