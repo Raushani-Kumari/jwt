@@ -13,20 +13,51 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import { UserContext } from "./context/UserContext";
 import Admin from "./components/jwt-ui/Admin";
 import { fetchCurrentUser, fetchToken, getToken } from "./services/authService";
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Error from "./components/jwt-ui/Error";
 import Seller from "./components/jwt-ui/Seller";
 import { Flex, Layout, Progress, Spin } from "antd";
 import Profile from "./components/jwt-ui/Profile";
-import Read from './components/read';
-import Create from './components/create';
+import Read from "./components/read";
+import Create from "./components/create";
 import AddProduct from "./components/jwt-ui/seller/AddProduct";
+import AppNavbar from "./components/layout/AppNavbar";
+import ViewByRole from "./routes/ViewByRole";
 
+const { Header, Footer, Sider, Content } = Layout;
 function App() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const { pathname } = useLocation();
   const { setUser } = useContext(UserContext);
+
+  const footerStyle = {
+    // textAlign: "center",
+    // color: "#fff",
+    // backgroundColor: "#4096ff",
+  };
+
+  const contentStyle = {
+    // textAlign: "center",
+    // minHeight: 120,
+    // lineHeight: "120px",
+    // color: "#fff",
+    // backgroundColor: "#0958d9",
+  };
+  const layoutStyle = {
+    height: "inherit",
+    // borderRadius: 8,
+    // overflow: 'hidden',
+    // width: 'calc(50% - 8px)',
+    // maxWidth: 'calc(50% - 8px)',
+  };
+  const siderStyle = {
+    position: 'fixed', 
+    textAlign: "center",
+    lineHeight: "120px",
+    color: "#fff",
+    backgroundColor: "#1677ff",
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -69,58 +100,79 @@ function App() {
           <Spin size="large" />
         </Flex>
       ) : (
-        <div className="app">
+        <Layout style={layoutStyle}>
+          {/* UnAuthorized Routes */}
           <Routes>
-            <Route
-              path="/home"
-              element={
-                <ProtectedRoute roles={["user", "admin", "seller"]}>
-                  <Home />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin"
-              element={
-                <ProtectedRoute roles={["admin"]}>
-                  <Admin />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/user"
-              element={
-                <ProtectedRoute roles={["user"]}>
-                  <Home />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/seller"
-              element={
-                <ProtectedRoute roles={["seller"]}>
-                  <Seller />
-                </ProtectedRoute>
-              }
-            />
-            <Route 
-            path="/seller/addproduct"
-            element= {
-              <ProtectedRoute roles={["seller"]}>
-                <AddProduct/>
-              </ProtectedRoute>
-            }
-            />
             <Route exact path="/" element={<LogIn />} />
             <Route exact path="/login" element={<LogIn />} />
             <Route exact path="/signup" element={<Signup />} />
-            <Route exact path="/error" element={<Error />} />
-            <Route exact path="/profile" element={<Profile />} />
-            {/* <Route exact path='/addproduct' element={<AddProduct/>} /> */}
-            <Route exact path='/create' Component={Create} />
-    //       <Route exact path='/read' Component={Read} />
           </Routes>
-        </div>
+          <Layout>
+            <AppNavbar />
+            <Layout>
+              <ViewByRole role={"seller"}>
+              <Sider width="20%" style={siderStyle}>
+                Sider
+              </Sider>
+              </ViewByRole>
+              <Layout>
+                {/* Authorized Routes */}
+                <Content style={contentStyle}>
+                  <div className="app">
+                    <Routes>
+                      <Route
+                        path="/home"
+                        element={
+                          <ProtectedRoute roles={["user", "admin", "seller"]}>
+                            <Home />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="/admin"
+                        element={
+                          <ProtectedRoute roles={["admin"]}>
+                            <Admin />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="/user"
+                        element={
+                          <ProtectedRoute roles={["user"]}>
+                            <Home />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="/seller"
+                        element={
+                          <ProtectedRoute roles={["seller"]}>
+                            <Seller />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="/seller/addproduct"
+                        element={
+                          <ProtectedRoute roles={["seller"]}>
+                            <AddProduct />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route exact path="/error" element={<Error />} />
+                      <Route exact path="/profile" element={<Profile />} />
+                      {/* <Route exact path='/addproduct' element={<AddProduct/>} /> */}
+                      <Route exact path="/create" Component={Create} />
+                      // <Route exact path="/read" Component={Read} />
+                    </Routes>
+                  </div>
+                </Content>
+                <Footer style={footerStyle}>Footer</Footer>
+              </Layout>
+            </Layout>
+          </Layout>
+        </Layout>
       )}
     </>
   );

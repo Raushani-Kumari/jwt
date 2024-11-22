@@ -18,7 +18,7 @@ const Logout = () => {
     }
     return (
         <>
-            <Button onClick={handleLogout} sx={{ color: "white"}}>Logout</Button>
+            <div onClick={handleLogout}>Logout</div>
         </>
     )
 }

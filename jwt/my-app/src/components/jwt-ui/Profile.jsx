@@ -81,7 +81,7 @@ const Profile = () => {
 
     return (
         <>
-            <Navbar />
+            {/* <Navbar /> */}
             <div>
                 <Row justify="center" align="middle" style={{ minHeight: "100vh" }}>
                     <Col xs={24} sm={16} md={12} lg={8}>

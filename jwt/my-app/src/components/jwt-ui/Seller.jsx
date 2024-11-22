@@ -6,7 +6,7 @@ import AddProduct from './seller/AddProduct';
 const Seller = () => {
     return (
         <>
-        <SellerNav />
+        {/* <SellerNav /> */}
         {/* <div style={{
             textAlign: "center", margin: "20px", padding: "20px", fontSize: "40px"
         }}>Seller Page</div> */}
