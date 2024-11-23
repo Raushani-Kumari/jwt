@@ -9,22 +9,23 @@ import { v4 as uuidv4 } from 'uuid';
 const addProduct = async (req, res) => {
     try {
         console.log("req.body is ", req.body);
-        const { pid, productTitle, productDescription, productPrice, productBrand, productCategory, productImage, productStock, productRating } = req.body;
-        console.log("prodcut id : ", pid);
-
+        const {productDetails} = req.body;
+        console.log("product details from re.body : ", productDetails);
+        const { productId, productTitle, productDescription, productPrice, productBrand, productCategory, image, productStock } = productDetails;
         if (!req.body) {
             console.log("no product found")
             return res.status(400).json({ error: "Product is required" });
         }
+        console.log("pid : ", productId)
         const existingProduct = await Products
-            .findOne({pid});
+            .findOne({productId});
             console.log("existing product", existingProduct)
         if (existingProduct) {
-            console.log("product already present in db");
-            return res.json({ message: "product already present in the db...u need to update it" });
+            console.error("product already present in db");
+            return res.json({ message: "product already present in db" });
         }
         // adding product details to db
-        const product = new Products({ pid, productTitle, productDescription, productPrice, productBrand, productCategory, productImage, productStock, productRating });
+        const product = new Products({ productId, productTitle, productDescription, productPrice, productBrand, productCategory, image, productStock });
         console.log("product : ", product)
         await product.save();
         console.log("product saved")
