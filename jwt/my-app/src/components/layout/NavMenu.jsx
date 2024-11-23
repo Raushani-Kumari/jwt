@@ -23,7 +23,8 @@ export default function NavMenu() {
         flex: 1,
         minWidth: 0,
         backgroundColor: "inherit",
-        color: "#fff",
+        // color: "#fff",
+        color:"white"
       }}
     />
   );

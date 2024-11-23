@@ -24,7 +24,7 @@ const headerStyle = {
   height: 64,
   paddingInline: 48,
   lineHeight: "64px",
-  backgroundColor: "#104689",
+  backgroundColor: "navy",
 };
 
 export default function AppNavbar() {
@@ -96,7 +96,7 @@ export default function AppNavbar() {
           }}
           level={3}
         >
-          ECom Shop
+          Ecommerce
         </Title>
         {!isMobile && <NavMenu />}
       </Flex>
@@ -110,7 +110,8 @@ export default function AppNavbar() {
                 fontSize: "24px",
                 cursor: "pointer",
                 backgroundColor: "white",
-                color: "#001f3d",
+                // color: "#001f3d",
+                color: "navy"
               }}
               icon={<UserOutlined />}
             />
@@ -120,6 +121,7 @@ export default function AppNavbar() {
       <Drawer
         title="Navigation"
         placement="left"
+        style={{backgroundColor:"navy"}}
         onClose={() => setVisibleDrawer(false)}
         open={visibleDrawer}
       >

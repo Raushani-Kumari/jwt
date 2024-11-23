@@ -34,6 +34,9 @@
   background-color: transparent !important;
   color: beige !important;
 }
+.ant-menu-title-content{
+  color: white;
+}
 
 /* 
 .ant-menu-item:hover{

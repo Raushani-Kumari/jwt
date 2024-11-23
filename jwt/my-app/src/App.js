@@ -56,7 +56,7 @@ function App() {
     textAlign: "center",
     lineHeight: "120px",
     color: "#fff",
-    backgroundColor: "#1677ff",
+    backgroundColor: "navy",
   };
 
   useEffect(() => {
@@ -110,11 +110,11 @@ function App() {
           <Layout>
             <AppNavbar />
             <Layout>
-              <ViewByRole role={"seller"}>
+              {/* <ViewByRole role={"seller"}>
               <Sider width="20%" style={siderStyle}>
                 Sider
               </Sider>
-              </ViewByRole>
+              </ViewByRole> */}
               <Layout>
                 {/* Authorized Routes */}
                 <Content style={contentStyle}>
@@ -153,7 +153,7 @@ function App() {
                         }
                       />
                       <Route
-                        path="/seller/addproduct"
+                        path="/addproduct"
                         element={
                           <ProtectedRoute roles={["seller"]}>
                             <AddProduct />
@@ -162,7 +162,6 @@ function App() {
                       />
                       <Route exact path="/error" element={<Error />} />
                       <Route exact path="/profile" element={<Profile />} />
-                      {/* <Route exact path='/addproduct' element={<AddProduct/>} /> */}
                       <Route exact path="/create" Component={Create} />
                       // <Route exact path="/read" Component={Read} />
                     </Routes>

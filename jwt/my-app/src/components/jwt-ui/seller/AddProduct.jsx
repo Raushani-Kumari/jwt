@@ -1,7 +1,18 @@
 import React, { useEffect, useState } from "react";
 import SellerNav from "./SellerNav";
-import { Button, Rate, Form, Input, Row, Col, Upload, message } from "antd";
+import {
+  Button,
+  Rate,
+  Form,
+  Input,
+  Row,
+  Col,
+  Upload,
+  message,
+  Flex,
+} from "antd";
 import { UploadOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 
 const AddProduct = () => {
   const [productDetails, setProductDetails] = useState({
@@ -16,6 +27,7 @@ const AddProduct = () => {
     productRating: 3,
   });
 
+  const navigate = useNavigate();
   const handleRateChange = (value) => {
     setProductDetails((prevDetails) => ({
       ...prevDetails,
@@ -35,6 +47,7 @@ const AddProduct = () => {
     if (info.file.status === "done") {
       // Assuming the response contains a URL of the uploaded image
       message.success(`${info.file.name} file uploaded successfully`);
+      console.log("Image details : ", productDetails.ProductImage)
       setProductDetails((prevDetails) => ({
         ...prevDetails,
         ProductImage: info.file.originFileObj, // Store the image file
@@ -60,9 +73,13 @@ const AddProduct = () => {
     message.success("Product added successfully!");
   };
 
+  const handleCancel = () => {
+    navigate("/home");
+  };
+
   return (
     <>
-      <SellerNav />
+      {/* <SellerNav /> */}
       <Row justify="center" align="middle" style={{ minHeight: "100vh" }}>
         <Col xs={24} sm={16} md={12} lg={8}>
           <div
@@ -73,10 +90,7 @@ const AddProduct = () => {
               borderRadius: "5px",
             }}
           >
-            <Form
-              className="create-form"
-              onFinish={handleProductData} // Use onFinish instead of onSubmitCapture
-            >
+            <Form className="create-form" onFinish={handleProductData}>
               <h1 className="form-heading">Add Product Details</h1>
 
               <Form.Item
@@ -211,14 +225,27 @@ const AddProduct = () => {
               </Form.Item>
 
               <Form.Item>
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  block
-                  style={{ backgroundColor: "navy", color: "white" }}
-                >
-                  Add Product
-                </Button>
+                <Flex gap="small" align="center" style={{ margin: "5px" }}>
+                  <Button
+                    style={{
+                      backgroundColor: "navy",
+                      color: "white",
+                      width: "270px",
+                    }}
+                    type="primary"
+                    htmlType="submit"
+                  >
+                    Add Product
+                  </Button>
+                  <Button
+                    type="primary"
+                    danger
+                    style={{ width: "270px" }}
+                    onClick={handleCancel}
+                  >
+                    Cancel
+                  </Button>
+                </Flex>
               </Form.Item>
             </Form>
           </div>
