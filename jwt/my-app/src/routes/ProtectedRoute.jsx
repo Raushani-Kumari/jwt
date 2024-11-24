@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Navigate, Outlet, Route, useNavigate } from "react-router-dom";
 import { isAuthenticated, fetchToken } from "../services/authService";
 import { UserContext } from "../context/UserContext";
+import { Flex } from "antd";
 
 const ProtectedRoute = ({ roles, children }) => {
   const { user } = useContext(UserContext);
@@ -26,7 +27,7 @@ const ProtectedRoute = ({ roles, children }) => {
     }
   }, [navigate]);
 
-  return <div>{children}</div>;
+  return <Flex>{children}</Flex>;
 };
 
 export default ProtectedRoute;

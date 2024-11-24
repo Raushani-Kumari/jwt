@@ -23,6 +23,11 @@ import Create from "./components/create";
 import AddProduct from "./components/jwt-ui/seller/AddProduct";
 import AppNavbar from "./components/layout/AppNavbar";
 import ViewByRole from "./routes/ViewByRole";
+import SideNav from "./components/layout/SideNav";
+import LandingPage from "./components/jwt-ui/LandingPage";
+import Products from "./components/jwt-ui/Products";
+import Orders from "./components/jwt-ui/Orders";
+import Dashboard from "./components/jwt-ui/Dashboard";
 
 const { Header, Footer, Sider, Content } = Layout;
 function App() {
@@ -38,6 +43,7 @@ function App() {
   };
 
   const contentStyle = {
+    overflow: "scroll",
     // textAlign: "center",
     // minHeight: 120,
     // lineHeight: "120px",
@@ -51,13 +57,6 @@ function App() {
     // width: 'calc(50% - 8px)',
     // maxWidth: 'calc(50% - 8px)',
   };
-  const siderStyle = {
-    position: 'fixed', 
-    textAlign: "center",
-    lineHeight: "120px",
-    color: "#fff",
-    backgroundColor: "navy",
-  };
 
   useEffect(() => {
     setLoading(true);
@@ -66,7 +65,7 @@ function App() {
     if (!existingSessionToken) {
       console.log("NO existing session, redirecting to login...");
       setLoading(false);
-      navigate("/login");
+      navigate("/");
       return;
     }
     console.log("Found existing session, restoring session...", pathname);
@@ -77,7 +76,7 @@ function App() {
       })
       .catch((error) => {
         console.log("UnAuthenticated...--->>>....Logging out...", error);
-        navigate("/login");
+        navigate("/");
       })
       .finally(() => {
         setLoading(false);
@@ -103,31 +102,54 @@ function App() {
         <Layout style={layoutStyle}>
           {/* UnAuthorized Routes */}
           <Routes>
-            <Route exact path="/" element={<LogIn />} />
             <Route exact path="/login" element={<LogIn />} />
             <Route exact path="/signup" element={<Signup />} />
           </Routes>
           <Layout>
             <AppNavbar />
             <Layout>
-              {/* <ViewByRole role={"seller"}>
-              <Sider width="20%" style={siderStyle}>
-                Sider
-              </Sider>
-              </ViewByRole> */}
+              <ViewByRole role={"seller"}>
+                <SideNav />
+              </ViewByRole>
               <Layout>
                 {/* Authorized Routes */}
                 <Content style={contentStyle}>
                   <div className="app">
                     <Routes>
-                      <Route
-                        path="/home"
-                        element={
-                          <ProtectedRoute roles={["user", "admin", "seller"]}>
-                            <Home />
-                          </ProtectedRoute>
-                        }
-                      />
+                      <Route exact path="/" element={<LandingPage />}>
+                        <Route
+                          path="/home"
+                          element={
+                            <ProtectedRoute roles={["user"]}>
+                              <Home />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/dashboard"
+                          element={
+                            <ProtectedRoute roles={["admin", "seller"]}>
+                              <Dashboard />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/products"
+                          element={
+                            <ProtectedRoute roles={["admin", "seller"]}>
+                              <Products />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/orders"
+                          element={
+                            <ProtectedRoute roles={["admin", "seller"]}>
+                              <Orders />
+                            </ProtectedRoute>
+                          }
+                        />
+                      </Route>
                       <Route
                         path="/admin"
                         element={
@@ -163,11 +185,11 @@ function App() {
                       <Route exact path="/error" element={<Error />} />
                       <Route exact path="/profile" element={<Profile />} />
                       <Route exact path="/create" Component={Create} />
-                      // <Route exact path="/read" Component={Read} />
+                      <Route exact path="/read" Component={Read} />
                     </Routes>
                   </div>
+                  <Footer style={footerStyle}>Footer</Footer>
                 </Content>
-                <Footer style={footerStyle}>Footer</Footer>
               </Layout>
             </Layout>
           </Layout>

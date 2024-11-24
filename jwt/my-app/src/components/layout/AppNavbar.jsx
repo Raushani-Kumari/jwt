@@ -10,6 +10,8 @@ import useWidth from "../hooks/useWidth";
 import NavMenu from "./NavMenu";
 import { UserContext } from "../../context/UserContext";
 import Logout from "../jwt-ui/Logout";
+import UnAuthenticatedMenu from "./UnAuthenticatedMenu";
+import ViewByAuth from "../../routes/ViewByAuth";
 
 const { Header, Footer, Sider, Content } = Layout;
 const { Title, Text } = Typography;
@@ -17,12 +19,13 @@ const { Title, Text } = Typography;
 const headerStyle = {
   // textAlign: "center",
   // color: "#fff",
+  boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px;",
+  zIndex: 1,
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
   width: "100%",
   height: 64,
-  paddingInline: 48,
   lineHeight: "64px",
   backgroundColor: "navy",
 };
@@ -64,12 +67,14 @@ export default function AppNavbar() {
       type: "divider",
     },
     {
-      label: <Logout/>,
+      label: <Logout />,
       key: "3",
     },
   ];
   return (
-    <Header style={headerStyle}>
+    <Header
+      style={{ ...headerStyle, ...{ paddingInline: isMobile ? 12 : 48 } }}
+    >
       {isMobile && (
         <Button
           type="primary"
@@ -83,7 +88,7 @@ export default function AppNavbar() {
           }}
         />
       )}
-      <Flex vertical={false}>
+      <Flex vertical={false} flex="1 1 100px">
         {!isMobile && (
           <ShopOutlined style={{ fontSize: "32px", color: "#fff" }} />
         )}
@@ -98,30 +103,35 @@ export default function AppNavbar() {
         >
           Ecommerce
         </Title>
-        {!isMobile && <NavMenu />}
+        <ViewByAuth viewOnAuth={true}>{!isMobile && <NavMenu />}</ViewByAuth>
+        <ViewByAuth viewOnAuth={false}>
+          <UnAuthenticatedMenu />
+        </ViewByAuth>
       </Flex>
-      <Dropdown menu={{ items }} trigger={["click"]}>
-        <a onClick={(e) => e.preventDefault()}>
-          <Space>
-            <Avatar
-              style={{
-                width: "3rem",
-                height: "3rem",
-                fontSize: "24px",
-                cursor: "pointer",
-                backgroundColor: "white",
-                // color: "#001f3d",
-                color: "navy"
-              }}
-              icon={<UserOutlined />}
-            />
-          </Space>
-        </a>
-      </Dropdown>
+      <ViewByAuth viewOnAuth={true}>
+        <Dropdown menu={{ items }} trigger={["click"]}>
+          <a onClick={(e) => e.preventDefault()}>
+            <Space>
+              <Avatar
+                style={{
+                  width: "3rem",
+                  height: "3rem",
+                  fontSize: "24px",
+                  cursor: "pointer",
+                  backgroundColor: "white",
+                  // color: "#001f3d",
+                  color: "navy",
+                }}
+                icon={<UserOutlined />}
+              />
+            </Space>
+          </a>
+        </Dropdown>
+      </ViewByAuth>
       <Drawer
         title="Navigation"
         placement="left"
-        style={{backgroundColor:"navy"}}
+        style={{ backgroundColor: "navy" }}
         onClose={() => setVisibleDrawer(false)}
         open={visibleDrawer}
       >

@@ -140,3 +140,9 @@
 .ant-menu-item-selected {
   background-color: rgba(224, 227, 236, 0.334) !important;
 }
+
+
+/* AUth Model  */
+.authModel .ant-modal-footer {
+  display: none;
+}

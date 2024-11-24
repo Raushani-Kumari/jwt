@@ -5,7 +5,7 @@ import { saveTokenWithExpiry } from "../../utils/tokenUtil";
 import { UserContext } from "../../context/UserContext";
 import { Button, Checkbox, Form, Input, message, Row, Col } from "antd";
 
-export default function LogIn() {
+export default function LogIn({ isModel }) {
   const { setUser } = useContext(UserContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -67,74 +67,94 @@ export default function LogIn() {
     }
   };
 
-  return (
-    <Row justify="center" align="middle" style={{ minHeight: "100vh" }}>
-      <Col xs={24} sm={16} md={12} lg={8}>
-        <div className="form" style={{ border: "1px solid rgb(40, 60, 92)", padding: "20px", borderRadius: "5px" }}>
-          <Form className="create-form" onSubmitCapture={handleFormData}>
-            <h1 className="form-heading">Log In</h1>
+  const formStyle = {
+    border: "1px solid rgb(40, 60, 92)",
+    padding: "20px",
+    borderRadius: "5px",
+  };
 
-            <Form.Item
-              style={{ width: "100%" }}
-              label="Email"
-              validateStatus={emailError ? "error" : ""}
-              help={emailError || ""}
-              labelCol={{ span: 24 }}
-              wrapperCol={{ span: 24 }}
-            >
-              <Input
-                placeholder="Email"
-                type="email"
-                value={email}
-                onChange={handleEmail}
-              />
-            </Form.Item>
+  const renderForm = (
+    <div className={!isModel && 'form' } style={{ ...(!isModel && formStyle) }}>
+      <Form className="create-form" onSubmitCapture={handleFormData}>
+        <h1 className="form-heading">Log In</h1>
 
-            <Form.Item
-              style={{ width: "100%" }}
-              label="Password"
-              validateStatus={passwordError ? "error" : ""}
-              help={passwordError || ""}
-              labelCol={{ span: 24 }}
-              wrapperCol={{ span: 24 }}
-            >
-              <Input.Password
-                placeholder="Password"
-                value={password}
-                onChange={handlePassword}
-              />
-            </Form.Item>
+        <Form.Item
+          style={{ width: "100%" }}
+          label="Email"
+          validateStatus={emailError ? "error" : ""}
+          help={emailError || ""}
+          labelCol={{ span: 24 }}
+          wrapperCol={{ span: 24 }}
+        >
+          <Input
+            placeholder="Email"
+            type="email"
+            value={email}
+            onChange={handleEmail}
+          />
+        </Form.Item>
 
-            <Form.Item>
-              <Checkbox
-                wrapperCol={{ span: 24 }}
-                onChange={(e) => setCheckbox(e.target.checked)}
-              >
-                I agree to the Terms and Conditions
-              </Checkbox>
-            </Form.Item>
+        <Form.Item
+          style={{ width: "100%" }}
+          label="Password"
+          validateStatus={passwordError ? "error" : ""}
+          help={passwordError || ""}
+          labelCol={{ span: 24 }}
+          wrapperCol={{ span: 24 }}
+        >
+          <Input.Password
+            placeholder="Password"
+            value={password}
+            onChange={handlePassword}
+          />
+        </Form.Item>
 
-            <Form.Item>
-              <Button
-                style={{ backgroundColor: "navy", color: "white" }}
-                className="custom-button"
-                type="primary"
-                htmlType="submit"
-                block
-                disabled={emailError || passwordError || !checkbox}
-              >
-                Log In
-              </Button>
-            </Form.Item>
+        <Form.Item>
+          <Checkbox
+            wrapperCol={{ span: 24 }}
+            onChange={(e) => setCheckbox(e.target.checked)}
+          >
+            I agree to the Terms and Conditions
+          </Checkbox>
+        </Form.Item>
 
-            <div style={{ textAlign: "center", marginTop: "16px" }}>
-              <span>
-                New User? <Link to="/signup">Sign Up</Link>
-              </span>
-            </div>
-          </Form>
+        <Form.Item>
+          <Button
+            style={{ backgroundColor: "navy", color: "white" }}
+            className="custom-button"
+            type="primary"
+            htmlType="submit"
+            block
+            disabled={emailError || passwordError || !checkbox}
+          >
+            Log In
+          </Button>
+        </Form.Item>
+
+        <div style={{ textAlign: "center", marginTop: "16px" }}>
+          <span>
+            New User? <Link to="/signup">Sign Up</Link>
+          </span>
         </div>
-      </Col>
-    </Row>
+      </Form>
+    </div>
+  );
+
+  return (
+    <>
+      {isModel ? (
+        renderForm
+      ) : (
+        <Row
+          justify="center"
+          align="middle"
+          style={{ minHeight: isModel ? "auto" : "100vh" }}
+        >
+          <Col xs={24} sm={16} md={12} lg={8}>
+            {renderForm}
+          </Col>
+        </Row>
+      )}
+    </>
   );
 }
