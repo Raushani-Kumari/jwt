@@ -261,26 +261,15 @@
 //           {renderaddProductForm}
 //         </Col>
 //       </Row>
-//        )} 
+//        )}
 //     </>
 //   );
 // };
 
 // export default AddProduct;
 
-
-
 import React, { useState } from "react";
-import {
-  Button,
-  Form,
-  Input,
-  Row,
-  Col,
-  Upload,
-  message,
-  Flex,
-} from "antd";
+import { Button, Form, Input, Row, Col, Upload, message, Flex } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { postProduct } from "../../../services/productService";
@@ -293,14 +282,18 @@ const AddProduct = ({ showProductForm }) => {
     productPrice: 0,
     productBrand: "",
     productCategory: "",
-    ProductImage: "", // Store base64 image string here
+    image: "", // Store base64 image string here
     productStock: 0,
   });
 
   const navigate = useNavigate();
 
   const handleChange = (e) => {
+    console.log("change ....");
+
     const { name, value } = e.target;
+    console.log("change ....", name, value);
+
     setProductDetails((prevDetails) => ({
       ...prevDetails,
       [name]: value,
@@ -308,7 +301,9 @@ const AddProduct = ({ showProductForm }) => {
   };
 
   const handleImageChange = (info) => {
+
     const file = info.file.originFileObj;
+    console.log("productDetails : ", productDetails, file);
     if (file) {
       // Convert image to base64
       const reader = new FileReader();
@@ -316,7 +311,7 @@ const AddProduct = ({ showProductForm }) => {
         const base64Image = reader.result; // Base64 encoded image
         setProductDetails((prevDetails) => ({
           ...prevDetails,
-          ProductImage: base64Image, // Store base64 image string
+          image: base64Image, // Store base64 image string
         }));
         message.success(`${info.file.name} file uploaded successfully`);
       };
@@ -329,26 +324,65 @@ const AddProduct = ({ showProductForm }) => {
     }
   };
 
+  // const handleImageChange = (info) => {
+  //   const file = info.file.originFileObj;
+
+  //   // If file is removed
+  //   if (info.file.status === "removed") {
+  //     setProductDetails((prevDetails) => ({
+  //       ...prevDetails,
+  //       image: "", // Clear the image from state
+  //     }));
+  //     return;
+  //   }
+
+  //   // Validate file type
+  //   const isImage = file.type.startsWith("image/");
+  //   if (!isImage) {
+  //     message.error("You can only upload image files!");
+  //     return;
+  //   }
+
+  //   // Validate file size (e.g., max 2MB)
+  //   const isSmallEnough = file.size / 1024 / 1024 < 2;
+  //   if (!isSmallEnough) {
+  //     message.error("Image must be smaller than 2MB!");
+  //     return;
+  //   }
+
+  //   // Convert image to base64 and update state
+  //   const reader = new FileReader();
+  //   reader.onloadend = () => {
+  //     const base64Image = reader.result;
+  //     setProductDetails((prevDetails) => ({
+  //       ...prevDetails,
+  //       image: base64Image,
+  //     }));
+  //     message.success(`${info.file.name} uploaded successfully`);
+  //   };
+  //   reader.readAsDataURL(file);
+  // };
   const handleProductData = async () => {
-    console.log("productDetails : ", productDetails)
+    console.log("productDetails : ", productDetails);
     if (!productDetails) {
       console.error("Enter all the product details");
     }
     try {
       const response = await postProduct({ productDetails });
-      if (response.message === "product already present in db") {
-        message.error(response.message);
-        return;
-      }
+      // if (response.message === "product already present in db") {
+      //   message.error(response.message);
+      //   return;
+      // }
+      console.log("response when posted from ui", response);
       message.success("Product added successfully!");
-      navigate("/product"); // Redirect to home after product is added
+      navigate("/products"); // Redirect to home after product is added
     } catch (error) {
       console.error("Error adding product:", error);
     }
   };
 
   const handleCancel = () => {
-    navigate("/product");
+    navigate("/products");
   };
 
   const renderaddProductForm = () => {
@@ -364,114 +398,151 @@ const AddProduct = ({ showProductForm }) => {
       >
         <Form className="create-form" onFinish={handleProductData}>
           <h1 className="form-heading">Add Product Details</h1>
-
           <Form.Item
             label="Product Id"
             name="productId"
             rules={[{ required: true, message: "Please enter the product ID" }]}
           >
             <Input
+              name="productId"
               placeholder="Enter the Product Id"
               type="number"
               value={productDetails.productId}
               onChange={handleChange}
             />
           </Form.Item>
-
           <Form.Item
             label="Product Title"
-            name="productTitle"
-            rules={[{ required: true, message: "Please enter the product title" }]}
+            rules={[
+              { required: true, message: "Please enter the product title" },
+            ]}
           >
             <Input
+              name="productTitle"
               placeholder="Enter the product title"
               value={productDetails.productTitle}
               onChange={handleChange}
             />
           </Form.Item>
-
           <Form.Item
             label="Product Description"
-            name="productDescription"
-            rules={[{ required: true, message: "Please enter the product description" }]}
+            rules={[
+              {
+                required: true,
+                message: "Please enter the product description",
+              },
+            ]}
           >
             <Input.TextArea
+              name="productDescription"
               placeholder="Enter product description"
               value={productDetails.productDescription}
               onChange={handleChange}
             />
           </Form.Item>
-
           <Form.Item
             label="Price"
-            name="productPrice"
             rules={[{ required: true, message: "Please enter the price" }]}
           >
             <Input
+              name="productPrice"
               placeholder="Enter the price"
               value={productDetails.productPrice}
               onChange={handleChange}
             />
           </Form.Item>
-
           <Form.Item
             label="Product Brand"
-            name="productBrand"
-            rules={[{ required: true, message: "Please enter the product brand" }]}
+            rules={[
+              { required: true, message: "Please enter the product brand" },
+            ]}
           >
             <Input
+              name="productBrand"
               placeholder="Enter product brand"
               value={productDetails.productBrand}
               onChange={handleChange}
             />
           </Form.Item>
-
           <Form.Item
             label="Product Category"
-            name="productCategory"
-            rules={[{ required: true, message: "Please enter the product category" }]}
+            rules={[
+              { required: true, message: "Please enter the product category" },
+            ]}
           >
             <Input
+              name="productCategory"
               placeholder="Enter product category"
               value={productDetails.productCategory}
               onChange={handleChange}
             />
           </Form.Item>
-
-          <Form.Item
+          {/* <Form.Item
             label="Product Image"
             name="image"
-            rules={[{ required: true, message: "Please upload the product image!" }]}
+            rules={[
+              { required: true, message: "Please upload the product image!" },
+            ]}
           >
             <Upload
               name="image"
               listType="picture"
               maxCount={1}
               onChange={handleImageChange}
-              beforeUpload={() => false} // Prevent automatic upload
+              beforeUpload={() => false} 
+            >
+              <Button icon={<UploadOutlined />}>Click to Upload</Button>
+            </Upload>
+          </Form.Item> */}
+          <Form.Item
+            label="Product Image"
+            name="image"
+            rules={[
+              { required: true, message: "Please upload the product image!" },
+            ]}
+          >
+            <Upload
+              name="image"
+              listType="picture"
+              maxCount={1}
+              onChange={handleImageChange}
+              beforeUpload={() => false} // Prevent auto-upload
+              onRemove={() => {
+                // Clear the image when removed
+                setProductDetails((prevDetails) => ({
+                  ...prevDetails,
+                  image: "",
+                }));
+              }}
             >
               <Button icon={<UploadOutlined />}>Click to Upload</Button>
             </Upload>
           </Form.Item>
-
+          ;
           <Form.Item
             label="Product Stock"
-            name="productStock"
-            rules={[{ required: true, message: "Please enter the product stock" }]}
+            rules={[
+              { required: true, message: "Please enter the product stock" },
+            ]}
           >
             <Input
+              name="productStock"
               placeholder="Product stock"
               value={productDetails.productStock}
               onChange={handleChange}
             />
           </Form.Item>
-
           <Form.Item>
-            <Flex gap="small" align="center" justify="center" style={{ margin: "5px" }}>
+            <Flex
+              gap="small"
+              align="center"
+              justify="center"
+              style={{ margin: "5px" }}
+            >
               <Button
-              style={{
-                width:"50%"
-              }}
+                style={{
+                  width: "50%",
+                }}
                 type="primary"
                 danger
                 onClick={handleCancel}
@@ -483,7 +554,7 @@ const AddProduct = ({ showProductForm }) => {
                   backgroundColor: "navy",
                   color: "white",
                   // minWidth: "270px",
-                  width:"50%"
+                  width: "50%",
                 }}
                 type="primary"
                 htmlType="submit"

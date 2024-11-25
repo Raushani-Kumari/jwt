@@ -1,18 +1,23 @@
 import axios from "axios";
-const API_PATH = "http://localhost:8080/api/product";
+import { message } from "antd";
+const API_PATH = "http://localhost:8080/api";
 
 export const postProduct = async ({ productDetails }) => {
+  console.log("product body in postporduct:", productDetails)
   try {
-    const response = await axios.post(`${API_PATH}/addproduct`, {
+    const response = await axios.post(
+     `${API_PATH}/upload`,
       productDetails,
-    });
-    console.log(
-      "response after sending product data to backend ",
-      response.data
+      {
+        headers: { "Content-Type": "application/json" },
+      },
+     
     );
-    return response.data;
+    message.success("Product uploaded successfully");
+    return response.data; 
   } catch (error) {
-    console.error("error in adding product", error);
+    console.log("error",error)
+    message.error("Error uploading product");
+    throw error;
   }
 };
-

@@ -8,8 +8,11 @@ import sellerRoute from './routes/sellerRoute.js';
 import productRoute from './routes/productRoute.js';
 import cors from 'cors';
 const app = express();
+// ALLOWED_IP=http://localhost:3000,http://192.168.0.199:3000
+const WHISLISTED_IP = process.env.ALLOWED_IP.split(',');
+
 app.use(cors({
-    origin: 'http://localhost:3000, http://192.168.0.199:3000',
+    origin: WHISLISTED_IP,
     methods: 'GET,POST',
     allowedHeaders: 'Content-Type,Authorization',
 }));
@@ -29,10 +32,14 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 
 app.use('/api', authRoute);
-app.use('/api/product', productRoute);
+app.use('/api', productRoute);
 app.use('/api/user', userRoute);
 app.use('/api/admin', adminRoute);
-app.use('/api/seller', sellerRoute)
+app.use('/api/seller', sellerRoute);
+
+app.use('/*', (req, res) => {
+    res.status(404).send({message: "Requested Resource Not found."})
+});
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
