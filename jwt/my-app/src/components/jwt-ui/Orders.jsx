@@ -176,10 +176,11 @@ const data = [
     tags: ["cool", "teacher"],
   },
 ];
+// for now like this...will fetch the data from api call
 const Orders = () => (
   <Flex flex="1 1 100px" style={{ padding: "1rem" }} vertical>
     <Flex align="center" gap="middle" style={{ padding: '1rem 0'}}>
-      <Button type="primary">Add Product</Button>
+      <Button type="primary">View Orders</Button>
       <Button type="primary">Reload</Button>
     </Flex>
     <Table style={{ flexGrow: 1 }} columns={columns} dataSource={data} />

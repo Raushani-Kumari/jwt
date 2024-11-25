@@ -1,5 +1,6 @@
-import React from "react";
-import { Flex, Space, Table, Tag } from "antd";
+import React, { useState } from "react";
+import { Button, Flex, Space, Table, Tag } from "antd";
+import AddProduct from "./seller/AddProduct";
 const columns = [
   {
     title: "Name",
@@ -71,9 +72,48 @@ const data = [
     tags: ["cool", "teacher"],
   },
 ];
-const Products = () => (
-  <Flex flex="1 1 100px" style={{ padding: "1rem" }}>
-    <Table  style={{ flexGrow: 1 }}  columns={columns} dataSource={data} />
-  </Flex>
-);
+// fetch the data from backend using get
+
+const Products = () => {
+  const [showProductForm, setShowProductForm] = useState(false);
+  const [viewProducts, setViewProducts] = useState(false);
+
+  const handleProductForm = () => {
+    setShowProductForm(true);
+    setViewProducts(false);
+  };
+
+  const handleViewProducts = () => {
+    setViewProducts(true); 
+    setShowProductForm(false);
+  };
+
+  return (
+    <Flex flex="1 1 100px" style={{ padding: "1rem" }} vertical>
+      <Flex align="center" gap="middle" style={{ padding: "1rem 0" }}>
+        <Button
+          type="primary"
+          style={{ backgroundColor: "navy" }}
+          onClick={handleProductForm}
+        >
+          Add Product
+        </Button>
+        <Button
+          type="primary"
+          style={{ backgroundColor: "navy" }}
+          onClick={handleViewProducts}
+        >
+          Reload
+        </Button>
+      </Flex>
+      {showProductForm ? (
+        <AddProduct showProductForm={true} />
+      ) : (
+        <Table style={{ flexGrow: 1 }} columns={columns} dataSource={data} />
+      )}
+      {/* <Table style={{ flexGrow: 1 }} columns={columns} dataSource={data} /> */}
+    </Flex>
+  );
+};
+
 export default Products;

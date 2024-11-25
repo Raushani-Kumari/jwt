@@ -4,8 +4,9 @@ import { login, saveToken } from "../../services/authService";
 import { saveTokenWithExpiry } from "../../utils/tokenUtil";
 import { UserContext } from "../../context/UserContext";
 import { Button, Checkbox, Form, Input, message, Row, Col } from "antd";
+import Signup from "./Signup";
 
-export default function LogIn({ isModel }) {
+export default function LogIn({ setShowModalContent, isModel }) {
   const { setUser } = useContext(UserContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -72,9 +73,12 @@ export default function LogIn({ isModel }) {
     padding: "20px",
     borderRadius: "5px",
   };
+  const handleSignupModal = () => {
+    setShowModalContent();
+  };
 
   const renderForm = (
-    <div className={!isModel && 'form' } style={{ ...(!isModel && formStyle) }}>
+    <div className={!isModel && "form"} style={{ ...(!isModel && formStyle) }}>
       <Form className="create-form" onSubmitCapture={handleFormData}>
         <h1 className="form-heading">Log In</h1>
 
@@ -133,7 +137,10 @@ export default function LogIn({ isModel }) {
 
         <div style={{ textAlign: "center", marginTop: "16px" }}>
           <span>
-            New User? <Link to="/signup">Sign Up</Link>
+            New User?{" "}
+            <Button type="text" onClick={handleSignupModal}>
+              Sign Up
+            </Button>
           </span>
         </div>
       </Form>

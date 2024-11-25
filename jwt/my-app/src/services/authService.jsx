@@ -6,7 +6,7 @@ import {
   saveTokenWithExpiry,
 } from "../utils/tokenUtil";
 
-const api_path = "http://localhost:8080/api";
+const api_path = "http://192.168.0.190:8080/api";
 
 export const register = async ({ username, email, password }) => {
   try {

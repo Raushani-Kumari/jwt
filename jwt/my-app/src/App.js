@@ -44,6 +44,7 @@ function App() {
 
   const contentStyle = {
     overflow: "scroll",
+    backgroundColor: "#eceef2",
     // textAlign: "center",
     // minHeight: 120,
     // lineHeight: "120px",
