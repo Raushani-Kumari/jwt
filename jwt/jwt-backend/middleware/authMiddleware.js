@@ -27,7 +27,7 @@ const tokenVerify = (req, res, next) => {
     req.user = user;
     console.log("userRole", req.user.role);
     next();
-  } catch {
+  } catch(error) {
     return res.status(401).json({
       status: "fail",
       message: "Unauthorized!!!",

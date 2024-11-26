@@ -5,6 +5,7 @@ import {
   getTokenWithExpiry,
   saveTokenWithExpiry,
 } from "../utils/tokenUtil";
+import { getAxiosClient } from "./apiClient";
 
 const api_path = "http://localhost:8080/api";
 
@@ -148,10 +149,25 @@ export const fetchToken = async () => {
   return data;
 };
 
+// call api using axios client instance with interceptor
+
+export const getAuthenticatedUser = async() => {
+  const axios = getAxiosClient();
+  const response = await axios.get(`/me`);
+  console.log("response from getAuthenticatedUser", response);
+}
+
+
+
+
+
+
+
 export const fetchCurrentUser = async (token) => {
   if (!token) {
     token = getTokenWithExpiry();
   }
+
   const response = await fetch(`${api_path}/me`, {
     method: "GET",
     headers: {

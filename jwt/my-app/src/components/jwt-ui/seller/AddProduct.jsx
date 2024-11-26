@@ -558,6 +558,8 @@ const AddProduct = ({ showProductForm, product, onSubmit }) => {
 
   const handleImageChange = (info) => {
     const file = info.file.originFileObj;
+    console.log(file);
+    
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {

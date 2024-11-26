@@ -9,11 +9,11 @@ import productRoute from './routes/productRoute.js';
 import cors from 'cors';
 const app = express();
 
-// const WHISLISTED_IP = process.env.ALLOWED_IP.split(',');
+const WHISLISTED_IP = process.env.ALLOWED_IP.split(',');
+console.log(WHISLISTED_IP);
 
 app.use(cors({
-    // origin: WHISLISTED_IP,
-    origin:"http://localhost:3000",
+    origin: WHISLISTED_IP,
     methods: 'GET,POST,PUT,DELETE',
     allowedHeaders: 'Content-Type,Authorization',
 }));

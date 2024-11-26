@@ -5,8 +5,11 @@ import { saveTokenWithExpiry } from "../../utils/tokenUtil";
 import { UserContext } from "../../context/UserContext";
 import { Button, Checkbox, Form, Input, message, Row, Col } from "antd";
 import Signup from "./Signup";
+import { AuthModelContext } from "../../context/AuthModelContext";
 
 export default function LogIn({ setShowModalContent, isModel }) {
+  const { setShowAuthModel } = useContext(AuthModelContext);
+
   const { setUser } = useContext(UserContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -58,6 +61,7 @@ export default function LogIn({ setShowModalContent, isModel }) {
         // save the token with the expiry time
         saveTokenWithExpiry(token, refreshToken);
         console.log("Login successful.");
+        setShowAuthModel(false)
         navigate("/home");
       } else {
         alert("Login failed. Invalid credentials.");

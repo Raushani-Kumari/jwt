@@ -10,7 +10,7 @@ import { AuthModelProvider } from "./context/AuthModelContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <BrowserRouter>
       <AuthModelProvider>
         <UserProvider>
@@ -18,7 +18,7 @@ root.render(
         </UserProvider>
       </AuthModelProvider>
     </BrowserRouter>
-  </React.StrictMode>
+  // </React.StrictMode>
 );
 
 reportWebVitals();

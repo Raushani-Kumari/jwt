@@ -183,7 +183,7 @@ const Orders = () => (
       <Button type="primary">View Orders</Button>
       <Button type="primary">Reload</Button>
     </Flex>
-    <Table style={{ flexGrow: 1 }} columns={columns} dataSource={data} />
+    <Table style={{ flexGrow: 1, boxShadow: 'rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px' }} columns={columns} dataSource={data} />
   </Flex>
 );
 export default Orders;

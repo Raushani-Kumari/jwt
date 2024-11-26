@@ -12,7 +12,7 @@ import Home from "./components/jwt-ui/Home";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import { UserContext } from "./context/UserContext";
 import Admin from "./components/jwt-ui/Admin";
-import { fetchCurrentUser, fetchToken, getToken } from "./services/authService";
+import { fetchCurrentUser, fetchToken, getAuthenticatedUser, getToken } from "./services/authService";
 import React, { useContext, useEffect, useState } from "react";
 import Error from "./components/jwt-ui/Error";
 import Seller from "./components/jwt-ui/Seller";
@@ -43,8 +43,8 @@ function App() {
   };
 
   const contentStyle = {
-    overflow: "scroll",
-    backgroundColor: "#eceef2",
+    background: '#fff',
+    // backgroundColor: "#eceef2",
     // textAlign: "center",
     // minHeight: 120,
     // lineHeight: "120px",
@@ -52,6 +52,7 @@ function App() {
     // backgroundColor: "#0958d9",
   };
   const layoutStyle = {
+    background: '#fff',
     height: "inherit",
     // borderRadius: 8,
     // overflow: 'hidden',
@@ -70,6 +71,7 @@ function App() {
       return;
     }
     console.log("Found existing session, restoring session...", pathname);
+    getAuthenticatedUser();
     fetchCurrentUser()
       .then((res) => {
         setUser({ ...res?.user, isAuthenticated: true });
@@ -100,7 +102,7 @@ function App() {
           <Spin size="large" />
         </Flex>
       ) : (
-        <Layout style={layoutStyle}>
+        <Layout className="bg-white" style={layoutStyle}>
           {/* UnAuthorized Routes */}
           <Routes>
             <Route exact path="/login" element={<LogIn />} />
@@ -114,7 +116,7 @@ function App() {
               </ViewByRole>
               <Layout>
                 {/* Authorized Routes */}
-                <Content style={contentStyle}>
+                <Content className="mainContentContainer" style={contentStyle}>
                   <div className="app">
                     <Routes>
                       <Route exact path="/" element={<LandingPage />}>
@@ -189,7 +191,7 @@ function App() {
                       <Route exact path="/read" Component={Read} />
                     </Routes>
                   </div>
-                  <Footer style={footerStyle}>Footer</Footer>
+                  {/* <Footer style={footerStyle}>Footer</Footer> */}
                 </Content>
               </Layout>
             </Layout>
