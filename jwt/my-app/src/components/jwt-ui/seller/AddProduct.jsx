@@ -268,32 +268,288 @@
 
 // export default AddProduct;
 
-import React, { useState } from "react";
-import { Button, Form, Input, Row, Col, Upload, message, Flex } from "antd";
+// import React, { useEffect, useState } from "react";
+// import { Button, Form, Input, Row, Col, Upload, message, Flex } from "antd";
+// import { UploadOutlined } from "@ant-design/icons";
+// import { useNavigate } from "react-router-dom";
+// import { postProduct } from "../../../services/productService";
+
+// const AddProduct = ({ showProductForm }) => {
+//   const [productDetails, setProductDetails] = useState({
+//     // productId: "",
+//     productTitle: "",
+//     productDescription: "",
+//     productPrice: "",
+//     productBrand: "",
+//     productCategory: "",
+//     image: "", // Store base64 image string here
+//     productStock: "",
+//   });
+//   useEffect(() => {
+//     console.log("Updated product details:", productDetails);
+//   }, [productDetails]);
+
+//   const navigate = useNavigate();
+
+//   const handleChange = (e) => {
+//     const { name, value } = e.target;
+//     setProductDetails((prevDetails) => ({
+//       ...prevDetails,
+//       [name]: value,
+//     }));
+//   };
+//   const handleImageChange = (info) => {
+//     const file = info.file.originFileObj;
+//     console.log("productDetails : ", productDetails, file);
+//     if (file) {
+//       // Convert image to base64
+//       const reader = new FileReader();
+//       reader.onloadend = () => {
+//         const base64Image = reader.result; // Base64 encoded image
+//         console.log("base64 image", base64Image);
+//         setProductDetails((prevDetails) => ({
+//           ...prevDetails,
+//           image: base64Image, // Store base64 image string
+//         }));
+//         // message.success(`${info.file.name} file uploaded successfully`);
+//       };
+
+//       reader.onerror = () => {
+//         message.error("File reading failed.");
+//       };
+
+//       reader.readAsDataURL(file); // Start reading the image file as base64
+//     }
+//   };
+
+//   const handleProductData = async () => {
+//     console.log("productDetails : ", productDetails);
+//     if (
+//       // !productDetails.productId ||
+//       !productDetails.productTitle ||
+//       !productDetails.productDescription ||
+//       !productDetails.productPrice ||
+//       !productDetails.productBrand ||
+//       !productDetails.productCategory ||
+//       !productDetails.image ||
+//       !productDetails.productStock
+//     ) {
+//       message.error("Enter all the product details");
+//     }
+//     try {
+//       const response = await postProduct({ productDetails });
+//       console.log("response when posted from ui", response);
+//       message.success("Product added successfully!");
+//       navigate("/products"); // Redirect to home after product is added
+//     } catch (error) {
+//       console.error("Error adding product:", error);
+//     }
+//   };
+
+//   const handleCancel = () => {
+//     navigate("/products");
+//   };
+
+//   const renderaddProductForm = () => {
+//     return (
+//       <div
+//         className="form"
+//         style={{
+//           // border: "1px solid rgb(40, 60, 92)",
+
+//           border: "none",
+//           padding: "20px",
+//           borderRadius: "5px",
+//         }}
+//       >
+//         <Form className="create-form" onFinish={handleProductData}>
+//           <h1 className="form-heading">Add Product Details</h1>
+//           {/* <Form.Item
+//             label="Product Id"
+//             name="productId"
+//             rules={[{ required: true, message: "Please enter the product ID" }]}
+//           >
+//             <Input
+//               name="productId"
+//               placeholder="Enter the Product Id"
+//               type="number"
+//               value={productDetails.productId}
+//               onChange={handleChange}
+//             />
+//           </Form.Item> */}
+//           <Form.Item
+//             label="Product Title"
+//             rules={[
+//               { required: true, message: "Please enter the product title" },
+//             ]}
+//           >
+//             <Input
+//               name="productTitle"
+//               placeholder="Enter the product title"
+//               value={productDetails.productTitle}
+//               onChange={handleChange}
+//             />
+//           </Form.Item>
+//           <Form.Item
+//             label="Product Description"
+//             rules={[
+//               {
+//                 required: true,
+//                 message: "Please enter the product description",
+//               },
+//             ]}
+//           >
+//             <Input.TextArea
+//               name="productDescription"
+//               placeholder="Enter product description"
+//               value={productDetails.productDescription}
+//               onChange={handleChange}
+//             />
+//           </Form.Item>
+//           <Form.Item
+//             label="Price"
+//             rules={[{ required: true, message: "Please enter the price" }]}
+//           >
+//             <Input
+//               name="productPrice"
+//               placeholder="Enter the price"
+//               value={productDetails.productPrice}
+//               onChange={handleChange}
+//             />
+//           </Form.Item>
+//           <Form.Item
+//             label="Product Brand"
+//             rules={[
+//               { required: true, message: "Please enter the product brand" },
+//             ]}
+//           >
+//             <Input
+//               name="productBrand"
+//               placeholder="Enter product brand"
+//               value={productDetails.productBrand}
+//               onChange={handleChange}
+//             />
+//           </Form.Item>
+//           <Form.Item
+//             label="Product Category"
+//             rules={[
+//               { required: true, message: "Please enter the product category" },
+//             ]}
+//           >
+//             <Input
+//               name="productCategory"
+//               placeholder="Enter product category"
+//               value={productDetails.productCategory}
+//               onChange={handleChange}
+//             />
+//           </Form.Item>
+//           <Form.Item
+//             label="Product Image"
+//             name="image"
+//             rules={[
+//               { required: true, message: "Please upload the product image!" },
+//             ]}
+//           >
+//             <Upload
+//               name="image"
+//               listType="picture"
+//               maxCount={1}
+//               onChange={handleImageChange}
+//               beforeUpload={() => false}
+//             >
+//               <Button icon={<UploadOutlined />}>Click to Upload</Button>
+//             </Upload>
+//           </Form.Item>
+//           <Form.Item
+//             label="Product Stock"
+//             rules={[
+//               { required: true, message: "Please enter the product stock" },
+//             ]}
+//           >
+//             <Input
+//               name="productStock"
+//               placeholder="Product stock"
+//               value={productDetails.productStock}
+//               onChange={handleChange}
+//             />
+//           </Form.Item>
+//           <Form.Item>
+//             <Flex
+//               gap="small"
+//               align="center"
+//               justify="center"
+//               style={{ margin: "5px" }}
+//             >
+//               <Button
+//                 style={{
+//                   width: "30%",
+//                 }}
+//                 type="primary"
+//                 danger
+//                 onClick={handleCancel}
+//               >
+//                 Cancel
+//               </Button>
+//               <Button
+//                 style={{
+//                   backgroundColor: "navy",
+//                   color: "white",
+//                   // minWidth: "270px",
+//                   width: "30%",
+//                 }}
+//                 type="primary"
+//                 htmlType="submit"
+//               >
+//                 Add Product
+//               </Button>
+//             </Flex>
+//           </Form.Item>
+//         </Form>
+//       </div>
+//     );
+//   };
+
+//   return <>{showProductForm && renderaddProductForm()}</>;
+// };
+
+// export default AddProduct;
+
+import React, { useEffect, useState } from "react";
+import { Button, Form, Input, Upload, message, Flex } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { postProduct } from "../../../services/productService";
 
-const AddProduct = ({ showProductForm }) => {
+const AddProduct = ({ showProductForm, product, onSubmit }) => {
   const [productDetails, setProductDetails] = useState({
-    productId: 0,
     productTitle: "",
     productDescription: "",
-    productPrice: 0,
+    productPrice: "",
     productBrand: "",
     productCategory: "",
-    image: "", // Store base64 image string here
-    productStock: 0,
+    image: "",
+    productStock: "",
   });
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (product) {
+      // Pre-fill the form fields if we're editing a product
+      setProductDetails({
+        productTitle: product.productTitle || "",
+        productDescription: product.productDescription || "",
+        productPrice: product.productPrice || "",
+        productBrand: product.productBrand || "",
+        productCategory: product.productCategory || "",
+        image: product.image || "",
+        productStock: product.productStock || "",
+      });
+    }
+  }, [product]);
+
   const handleChange = (e) => {
-    console.log("change ....");
-
     const { name, value } = e.target;
-    console.log("change ....", name, value);
-
     setProductDetails((prevDetails) => ({
       ...prevDetails,
       [name]: value,
@@ -301,19 +557,15 @@ const AddProduct = ({ showProductForm }) => {
   };
 
   const handleImageChange = (info) => {
-
     const file = info.file.originFileObj;
-    console.log("productDetails : ", productDetails, file);
     if (file) {
-      // Convert image to base64
       const reader = new FileReader();
       reader.onloadend = () => {
-        const base64Image = reader.result; // Base64 encoded image
+        const base64Image = reader.result;
         setProductDetails((prevDetails) => ({
           ...prevDetails,
           image: base64Image, // Store base64 image string
         }));
-        message.success(`${info.file.name} file uploaded successfully`);
       };
 
       reader.onerror = () => {
@@ -324,55 +576,29 @@ const AddProduct = ({ showProductForm }) => {
     }
   };
 
-  // const handleImageChange = (info) => {
-  //   const file = info.file.originFileObj;
-
-  //   // If file is removed
-  //   if (info.file.status === "removed") {
-  //     setProductDetails((prevDetails) => ({
-  //       ...prevDetails,
-  //       image: "", // Clear the image from state
-  //     }));
-  //     return;
-  //   }
-
-  //   // Validate file type
-  //   const isImage = file.type.startsWith("image/");
-  //   if (!isImage) {
-  //     message.error("You can only upload image files!");
-  //     return;
-  //   }
-
-  //   // Validate file size (e.g., max 2MB)
-  //   const isSmallEnough = file.size / 1024 / 1024 < 2;
-  //   if (!isSmallEnough) {
-  //     message.error("Image must be smaller than 2MB!");
-  //     return;
-  //   }
-
-  //   // Convert image to base64 and update state
-  //   const reader = new FileReader();
-  //   reader.onloadend = () => {
-  //     const base64Image = reader.result;
-  //     setProductDetails((prevDetails) => ({
-  //       ...prevDetails,
-  //       image: base64Image,
-  //     }));
-  //     message.success(`${info.file.name} uploaded successfully`);
-  //   };
-  //   reader.readAsDataURL(file);
-  // };
   const handleProductData = async () => {
-    console.log("productDetails : ", productDetails);
-    if (!productDetails) {
-      console.error("Enter all the product details");
+    if (
+      !productDetails.productTitle ||
+      !productDetails.productDescription ||
+      !productDetails.productPrice ||
+      !productDetails.productBrand ||
+      !productDetails.productCategory ||
+      !productDetails.image ||
+      !productDetails.productStock
+    ) {
+      message.error("Enter all the product details");
+      return;
+    }
+
+    // Pass the product details to the onSubmit function (either add or update)
+    if (onSubmit) {
+      onSubmit(productDetails);
+      // call the update api here
+      // since i am using same addproductform, it is executing this whole func--->>>leading to creating new product instead of updating
+      // need to segregate the logic for adding product and updating product --> then it will function
     }
     try {
       const response = await postProduct({ productDetails });
-      // if (response.message === "product already present in db") {
-      //   message.error(response.message);
-      //   return;
-      // }
       console.log("response when posted from ui", response);
       message.success("Product added successfully!");
       navigate("/products"); // Redirect to home after product is added
@@ -385,32 +611,14 @@ const AddProduct = ({ showProductForm }) => {
     navigate("/products");
   };
 
-  const renderaddProductForm = () => {
+  const renderAddProductForm = () => {
     return (
-      <div
-        className="form"
-        style={{
-          // border: "1px solid rgb(40, 60, 92)",
-          border: "none",
-          padding: "20px",
-          borderRadius: "5px",
-        }}
-      >
+      <div className="form" style={{ padding: "20px", borderRadius: "5px" }}>
         <Form className="create-form" onFinish={handleProductData}>
-          <h1 className="form-heading">Add Product Details</h1>
-          <Form.Item
-            label="Product Id"
-            name="productId"
-            rules={[{ required: true, message: "Please enter the product ID" }]}
-          >
-            <Input
-              name="productId"
-              placeholder="Enter the Product Id"
-              type="number"
-              value={productDetails.productId}
-              onChange={handleChange}
-            />
-          </Form.Item>
+          <h1 className="form-heading">
+            {product ? "Edit Product" : "Add Product"}
+          </h1>
+
           <Form.Item
             label="Product Title"
             rules={[
@@ -424,6 +632,7 @@ const AddProduct = ({ showProductForm }) => {
               onChange={handleChange}
             />
           </Form.Item>
+
           <Form.Item
             label="Product Description"
             rules={[
@@ -440,6 +649,7 @@ const AddProduct = ({ showProductForm }) => {
               onChange={handleChange}
             />
           </Form.Item>
+
           <Form.Item
             label="Price"
             rules={[{ required: true, message: "Please enter the price" }]}
@@ -451,6 +661,7 @@ const AddProduct = ({ showProductForm }) => {
               onChange={handleChange}
             />
           </Form.Item>
+
           <Form.Item
             label="Product Brand"
             rules={[
@@ -464,6 +675,7 @@ const AddProduct = ({ showProductForm }) => {
               onChange={handleChange}
             />
           </Form.Item>
+
           <Form.Item
             label="Product Category"
             rules={[
@@ -477,23 +689,7 @@ const AddProduct = ({ showProductForm }) => {
               onChange={handleChange}
             />
           </Form.Item>
-          {/* <Form.Item
-            label="Product Image"
-            name="image"
-            rules={[
-              { required: true, message: "Please upload the product image!" },
-            ]}
-          >
-            <Upload
-              name="image"
-              listType="picture"
-              maxCount={1}
-              onChange={handleImageChange}
-              beforeUpload={() => false} 
-            >
-              <Button icon={<UploadOutlined />}>Click to Upload</Button>
-            </Upload>
-          </Form.Item> */}
+
           <Form.Item
             label="Product Image"
             name="image"
@@ -506,19 +702,12 @@ const AddProduct = ({ showProductForm }) => {
               listType="picture"
               maxCount={1}
               onChange={handleImageChange}
-              beforeUpload={() => false} // Prevent auto-upload
-              onRemove={() => {
-                // Clear the image when removed
-                setProductDetails((prevDetails) => ({
-                  ...prevDetails,
-                  image: "",
-                }));
-              }}
+              beforeUpload={() => false}
             >
               <Button icon={<UploadOutlined />}>Click to Upload</Button>
             </Upload>
           </Form.Item>
-          ;
+
           <Form.Item
             label="Product Stock"
             rules={[
@@ -532,6 +721,7 @@ const AddProduct = ({ showProductForm }) => {
               onChange={handleChange}
             />
           </Form.Item>
+
           <Form.Item>
             <Flex
               gap="small"
@@ -540,9 +730,7 @@ const AddProduct = ({ showProductForm }) => {
               style={{ margin: "5px" }}
             >
               <Button
-                style={{
-                  width: "50%",
-                }}
+                style={{ width: "30%" }}
                 type="primary"
                 danger
                 onClick={handleCancel}
@@ -553,13 +741,12 @@ const AddProduct = ({ showProductForm }) => {
                 style={{
                   backgroundColor: "navy",
                   color: "white",
-                  // minWidth: "270px",
-                  width: "50%",
+                  width: "30%",
                 }}
                 type="primary"
                 htmlType="submit"
               >
-                Add Product
+                {product ? "Update" : "Add"} Product
               </Button>
             </Flex>
           </Form.Item>
@@ -568,7 +755,7 @@ const AddProduct = ({ showProductForm }) => {
     );
   };
 
-  return <>{showProductForm && renderaddProductForm()}</>;
+  return <>{showProductForm && renderAddProductForm()}</>;
 };
 
 export default AddProduct;

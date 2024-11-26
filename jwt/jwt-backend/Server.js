@@ -8,12 +8,13 @@ import sellerRoute from './routes/sellerRoute.js';
 import productRoute from './routes/productRoute.js';
 import cors from 'cors';
 const app = express();
-// ALLOWED_IP=http://localhost:3000,http://192.168.0.199:3000
-const WHISLISTED_IP = process.env.ALLOWED_IP.split(',');
+
+// const WHISLISTED_IP = process.env.ALLOWED_IP.split(',');
 
 app.use(cors({
-    origin: WHISLISTED_IP,
-    methods: 'GET,POST',
+    // origin: WHISLISTED_IP,
+    origin:"http://localhost:3000",
+    methods: 'GET,POST,PUT,DELETE',
     allowedHeaders: 'Content-Type,Authorization',
 }));
 app.use(express.json());

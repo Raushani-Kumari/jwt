@@ -7,6 +7,7 @@
 .form-heading {
   text-align: center;
   font-weight: none;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   /* color: rgba(6, 6, 51, 0.584); */
   color: #060663eb;
 }
@@ -15,6 +16,7 @@
   .form-heading {
     font-size: 24px;
     text-align: center;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   }
 
   .form {
