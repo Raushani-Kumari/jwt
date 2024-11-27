@@ -33,6 +33,7 @@ import LandingPage from "./components/jwt-ui/LandingPage";
 import Products from "./components/jwt-ui/Products";
 import Orders from "./components/jwt-ui/Orders";
 import Dashboard from "./components/jwt-ui/Dashboard";
+import MyForm from "./components/jwt-ui/Test_ui";
 
 const { Header, Footer, Sider, Content } = Layout;
 function App() {
@@ -112,6 +113,7 @@ function App() {
           <Routes>
             <Route exact path="/login" element={<LogIn />} />
             <Route exact path="/signup" element={<Signup />} />
+            <Route exact path="/test" element={<MyForm/>} />
           </Routes>
           <Layout>
             <AppNavbar />

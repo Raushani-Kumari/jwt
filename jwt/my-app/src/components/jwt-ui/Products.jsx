@@ -13,46 +13,21 @@ const Products = () => {
   const [editingProduct, setEditingProduct] = useState(null); // Track the product being edited
   const [isModalVisible, setIsModalVisible] = useState(false); // To control modal visibility
 
-  // useEffect(() => {
-  //   fetch(`${API_PATH}/products`)
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       console.log("product detail received : ", data);
-  //       setProducts(data);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching product data:", error);
-  //     });
-  // }, []);
-
   useEffect(() => {
     fetch(`${API_PATH}/products`)
       .then((response) => response.json())
       .then((data) => {
-        // Convert binary data to base64
-        const updatedData = data.map((product) => {
-          const base64String = btoa(
-            new Uint8Array(product.image.data.data).reduce(
-              (data, byte) => data + String.fromCharCode(byte),
-              ""
-            )
-          );
-          return { ...product, image: base64String };
-        });
-        console.log("product detail received : ", updatedData);
-        setProducts(updatedData);
+        console.log(
+          "data in useEffect after fetching products..........",
+          data
+        );
+        setProducts(data);
       })
       .catch((error) => {
         console.error("Error fetching product data:", error);
       });
   }, []);
-
   const columns = [
-    // {
-    //   title: 'Product ID',
-    //   dataIndex: 'productId',
-    //   key: 'productId',
-    // },
     {
       title: "Product Title",
       dataIndex: "productTitle",
@@ -88,11 +63,11 @@ const Products = () => {
       dataIndex: "image",
       key: "image",
       render: (image) => (
+        // {image && (
         <Image
-          width={100} // Set your preferred image size
-          src={image}
-          // src={`data:image/jpeg;base64,${image.data}`} // Access the base64 string directly from the object
-          alt="Product Image"
+        width={80}
+          src={`data:image/jpeg;base64,${image.data}`}
+          alt='product image'
         />
       ),
     },
@@ -132,6 +107,7 @@ const Products = () => {
 
   const handleEdit = (product) => {
     setEditingProduct(product); // Set the product to be edited
+    console.log("product to be edited : ", editingProduct)
     setIsModalVisible(true); // Show the modal with the form
   };
 
@@ -147,61 +123,23 @@ const Products = () => {
 
   const handleDeleteProduct = async (productId) => {
     try {
-      const response = await deleteProduct(productId);  // Pass the product ID
+      const response = await deleteProduct(productId); // Pass the product ID
       console.log("response after deleting : ", response);
       setProducts(
-        products.filter((product) => product._id !== productId)  // Filter out the deleted product from state
+        products.filter((product) => product._id !== productId) // Filter out the deleted product from state
       );
       message.success("Product deleted successfully");
     } catch (error) {
       message.error("Error in deleting product: ", error);
     }
   };
-  
-
-  // const handleUpdate = async (updatedProduct) => {
-  //   try {
-  //     const response = await updateProduct({ productDetails: updatedProduct });
-  //     console.log("response after calling updateproduct : ", response);
-  //     setProducts(
-  //       products.map((product) =>
-  //         product._id === updatedProduct._id ? updatedProduct : product
-  //       )
-  //     );
-  //     setIsModalVisible(false);
-  //     return response;
-  //   } catch (error) {
-  //     console.error("error........", error);
-  //   }
-  // };
-  // Update the product in the database
-  // fetch(`${API_PATH}/products/product-update/${updatedProduct}`, {
-  //   method: 'PUT',
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //   },
-  //   body: JSON.stringify(updatedProduct),
-  // })
-  //   .then((response) => response.json())
-  //   .then((data) => {
-  //     // Update the products state with the updated product
-  //     setProducts(products.map(product => product.productId === updatedProduct._id ? updatedProduct : product));
-  //     setIsModalVisible(false); // Close the modal
-  //     console.log('Product updated successfully:', data);
-  //   })
-  //   .catch((error) => {
-  //     console.error('Error updating product:', error);
-  //   });
-
-
-
   const handleUpdate = async (updatedProduct) => {
     try {
-      const response = await updateProduct(updatedProduct);  // Pass the full product object, including the ID
+      const response = await updateProduct(updatedProduct); // Pass the full product object, including the ID
       console.log("response after calling updateproduct: ", response);
       setProducts(
-        products.map((product) =>
-          product._id === updatedProduct._id ? response : product  // Replace the updated product in the list
+        products.map(
+          (product) => (product._id === updatedProduct._id ? response : product) // Replacing the updated product 
         )
       );
       setIsModalVisible(false);
@@ -209,7 +147,7 @@ const Products = () => {
       console.error("error........", error);
     }
   };
-  
+
   return (
     <Flex flex="1 1 100px" style={{ padding: "1rem" }} vertical>
       <Flex align="center" gap="middle" style={{ padding: "10px" }}>
@@ -229,10 +167,14 @@ const Products = () => {
         </Button>
       </Flex>
       {showProductForm ? (
-        <AddProduct showProductForm={true} />
+        <AddProduct productId = {editingProduct} showProductForm={true} />
       ) : (
         <Table
-          style={{ flexGrow: 1, boxShadow: 'rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px' }}
+          style={{
+            flexGrow: 1,
+            boxShadow:
+              "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
+          }}
           columns={columns}
           dataSource={products}
         />
@@ -248,7 +190,7 @@ const Products = () => {
       >
         <AddProduct
           showProductForm={true}
-          product={editingProduct} // Pass product data for editing
+          productId={editingProduct} // Pass product data for editing
           onSubmit={handleUpdate} // Handle form submission (update product)
         />
       </Modal>

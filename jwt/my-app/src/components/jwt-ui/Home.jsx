@@ -17,7 +17,7 @@ const Home = () => {
       } catch (error) {
         console.log("Error fetching data:", error);
         setData(error.message || "Failed to load data");
-        navigate("/login");
+        navigate("/");
       }
     };
 

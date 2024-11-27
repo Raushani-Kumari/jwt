@@ -515,12 +515,12 @@
 // export default AddProduct;
 
 import React, { useEffect, useState } from "react";
-import { Button, Form, Input, Upload, message, Flex } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import { Button, Form, Input, Upload, message, Flex, List } from "antd";
+import { DeleteOutlined, UploadOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { postProduct } from "../../../services/productService";
+import { postProduct, updateProduct } from "../../../services/productService";
 
-const AddProduct = ({ showProductForm, product, onSubmit }) => {
+const AddProduct = ({ productId, showProductForm, product, onSubmit }) => {
   const [productDetails, setProductDetails] = useState({
     productTitle: "",
     productDescription: "",
@@ -530,7 +530,8 @@ const AddProduct = ({ showProductForm, product, onSubmit }) => {
     image: "",
     productStock: "",
   });
-
+  const [fileList, setFileList] = useState([]);
+  const API_PATH = "http://localhost:8080/api";
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -546,8 +547,9 @@ const AddProduct = ({ showProductForm, product, onSubmit }) => {
         productStock: product.productStock || "",
       });
     }
-  }, [product]);
 
+    // console.log("editing product in useeffect.................", productId)
+  }, [product]);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProductDetails((prevDetails) => ({
@@ -555,27 +557,33 @@ const AddProduct = ({ showProductForm, product, onSubmit }) => {
       [name]: value,
     }));
   };
-
-  const handleImageChange = (info) => {
-    const file = info.file.originFileObj;
-    console.log(file);
-    
-    if (file) {
+  const getBase64 = (file) => {
+    return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64Image = reader.result;
-        setProductDetails((prevDetails) => ({
-          ...prevDetails,
-          image: base64Image, // Store base64 image string
-        }));
-      };
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  };
 
-      reader.onerror = () => {
-        message.error("File reading failed.");
-      };
+  const handleBeforeUpload = async (file) => {
+    console.log("before upload is called...");
+    const base64 = await getBase64(file);
+    // setImageBase64(base64);
+    setProductDetails((prevDetails) => ({
+      ...prevDetails,
+      image: base64, // Store base64 image string
+    }));
+    setFileList([file]);
+    return false; // Prevent upload
+  };
 
-      reader.readAsDataURL(file); // Start reading the image file as base64
-    }
+  const handleRemove = () => {
+    setProductDetails((prevDetails) => ({
+      ...prevDetails,
+      image: "",
+    }));
+    setFileList([]);
   };
 
   const handleProductData = async () => {
@@ -593,19 +601,33 @@ const AddProduct = ({ showProductForm, product, onSubmit }) => {
     }
 
     // Pass the product details to the onSubmit function (either add or update)
+    // call the update api here
+    // since i am using same addproductform, it is executing this whole func--->>>leading to creating new product instead of updating
+    // need to segregate the logic for adding product and updating product --> then it will function
     if (onSubmit) {
-      onSubmit(productDetails);
-      // call the update api here
-      // since i am using same addproductform, it is executing this whole func--->>>leading to creating new product instead of updating
-      // need to segregate the logic for adding product and updating product --> then it will function
-    }
-    try {
-      const response = await postProduct({ productDetails });
-      console.log("response when posted from ui", response);
-      message.success("Product added successfully!");
-      navigate("/products"); // Redirect to home after product is added
-    } catch (error) {
-      console.error("Error adding product:", error);
+      onSubmit(productId);
+      console.log("produtc for update : ", productId)
+      // console.log("product id for updation : ", editingProduct._id)
+      try {
+        const updatedResponse = await updateProduct({ productId});
+        console.log(
+          "posting product data to be updated at the backend : ",
+          updatedResponse
+        );
+        message.success("product updated");
+        navigate("/products");
+      } catch (error) {
+        console.error("error in updating the product : ", error);
+      }
+    } else {
+      try {
+        const response = await postProduct({ productDetails });
+        console.log("response when posted from ui", response);
+        message.success("Product added successfully!");
+        navigate("/products"); // Redirect to home after product is added
+      } catch (error) {
+        console.error("Error adding product:", error);
+      }
     }
   };
 
@@ -692,24 +714,44 @@ const AddProduct = ({ showProductForm, product, onSubmit }) => {
             />
           </Form.Item>
 
+          {/* disply the product image added and a delete button to delete and select another image */}
+
           <Form.Item
-            label="Product Image"
-            name="image"
-            rules={[
-              { required: true, message: "Please upload the product image!" },
-            ]}
+            name="upload"
+            label="Upload"
+            valuePropName="fileList"
+            getValueFromEvent={() => fileList}
           >
             <Upload
-              name="image"
-              listType="picture"
+              beforeUpload={handleBeforeUpload}
+              fileList={fileList}
               maxCount={1}
-              onChange={handleImageChange}
-              beforeUpload={() => false}
+              onRemove={handleRemove}
             >
               <Button icon={<UploadOutlined />}>Click to Upload</Button>
             </Upload>
+            {fileList.length > 0 && (
+              <List
+                itemLayout="horizontal"
+                dataSource={fileList}
+                renderItem={(file) => (
+                  <List.Item
+                    actions={[
+                      <Button
+                        type="link"
+                        icon={<DeleteOutlined />}
+                        onClick={handleRemove}
+                      >
+                        Delete
+                      </Button>,
+                    ]}
+                  >
+                    <List.Item.Meta title={file.name} />
+                  </List.Item>
+                )}
+              />
+            )}
           </Form.Item>
-
           <Form.Item
             label="Product Stock"
             rules={[
