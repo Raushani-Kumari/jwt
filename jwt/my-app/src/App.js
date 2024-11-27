@@ -12,7 +12,12 @@ import Home from "./components/jwt-ui/Home";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import { UserContext } from "./context/UserContext";
 import Admin from "./components/jwt-ui/Admin";
-import { fetchCurrentUser, fetchToken, getAuthenticatedUser, getToken } from "./services/authService";
+import {
+  fetchCurrentUser,
+  fetchToken,
+  getAuthenticatedUser,
+  getToken,
+} from "./services/authService";
 import React, { useContext, useEffect, useState } from "react";
 import Error from "./components/jwt-ui/Error";
 import Seller from "./components/jwt-ui/Seller";
@@ -43,7 +48,7 @@ function App() {
   };
 
   const contentStyle = {
-    background: '#fff',
+    background: "#fff",
     // backgroundColor: "#eceef2",
     // textAlign: "center",
     // minHeight: 120,
@@ -52,7 +57,7 @@ function App() {
     // backgroundColor: "#0958d9",
   };
   const layoutStyle = {
-    background: '#fff',
+    background: "#fff",
     height: "inherit",
     // borderRadius: 8,
     // overflow: 'hidden',
@@ -71,8 +76,8 @@ function App() {
       return;
     }
     console.log("Found existing session, restoring session...", pathname);
-    getAuthenticatedUser();
-    fetchCurrentUser()
+    // fetchCurrentUser();
+    getAuthenticatedUser()
       .then((res) => {
         setUser({ ...res?.user, isAuthenticated: true });
         navigate(pathname);

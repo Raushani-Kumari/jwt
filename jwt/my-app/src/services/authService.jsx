@@ -154,7 +154,7 @@ export const fetchToken = async () => {
 export const getAuthenticatedUser = async() => {
   const axios = getAxiosClient();
   const response = await axios.get(`/me`);
-  console.log("response from getAuthenticatedUser", response);
+  return response.data;
 }
 
 

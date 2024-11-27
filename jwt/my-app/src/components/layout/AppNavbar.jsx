@@ -19,7 +19,7 @@ const { Title, Text } = Typography;
 const headerStyle = {
   // textAlign: "center",
   // color: "#fff",
-  boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px;",
+  boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
   zIndex: 1,
   display: "flex",
   alignItems: "center",

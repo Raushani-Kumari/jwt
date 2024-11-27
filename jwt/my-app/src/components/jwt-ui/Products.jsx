@@ -241,7 +241,7 @@ const Products = () => {
       {/* Modal to Edit Product */}
       <Modal
         // title="Edit Product"
-        visible={isModalVisible}
+        open={isModalVisible}
         onCancel={() => setIsModalVisible(false)}
         footer={null} // We will add the footer manually to control the buttons
         destroyOnClose // Ensure modal is cleaned up when closed
